@@ -1,0 +1,2 @@
+Things to be changed:
+	-> For now, we aren't doing that split up part of the skeleton graph.
