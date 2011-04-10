@@ -1,0 +1,435 @@
+morfeu@morfeu09:~$ sudo iwlist wlan0 scan
+[sudo] password for morfeu: 
+wlan0     Scan completed :
+          Cell 01 - Address: 00:23:33:A3:44:31
+                    Channel:1
+                    Frequency:2.412 GHz (Channel 1)
+                    Quality=44/70  Signal level=-66 dBm  
+                    Encryption key:on
+                    ESSID:"eduroam"
+                    Bit Rates:1 Mb/s; 2 Mb/s; 5.5 Mb/s; 6 Mb/s; 9 Mb/s
+                              11 Mb/s; 12 Mb/s; 18 Mb/s
+                    Bit Rates:24 Mb/s; 36 Mb/s; 48 Mb/s; 54 Mb/s
+                    Mode:Master
+                    Extra:tsf=00000339c67e118d
+                    Extra: Last beacon: 972ms ago
+                    IE: Unknown: 0007656475726F616D
+                    IE: Unknown: 010882848B0C12961824
+                    IE: Unknown: 030101
+                    IE: Unknown: 2A0100
+                    IE: Unknown: 32043048606C
+                    IE: WPA Version 1
+                        Group Cipher : TKIP
+                        Pairwise Ciphers (1) : TKIP
+                        Authentication Suites (1) : 802.1x
+                    IE: Unknown: DD06004096010102
+                    IE: Unknown: DD050040960305
+                    IE: Unknown: DD050040960B09
+                    IE: Unknown: DD050040961400
+                    IE: Unknown: DD180050F2020101830003A5000027A500004254BC0062436600
+          Cell 02 - Address: 00:23:33:A3:44:32
+                    Channel:1
+                    Frequency:2.412 GHz (Channel 1)
+                    Quality=42/70  Signal level=-68 dBm  
+                    Encryption key:off
+                    ESSID:"eduroam-guest"
+                    Bit Rates:1 Mb/s; 2 Mb/s; 5.5 Mb/s; 6 Mb/s; 9 Mb/s
+                              11 Mb/s; 12 Mb/s; 18 Mb/s
+                    Bit Rates:24 Mb/s; 36 Mb/s; 48 Mb/s; 54 Mb/s
+                    Mode:Master
+                    Extra:tsf=00000339c67c818d
+                    Extra: Last beacon: 948ms ago
+                    IE: Unknown: 000D656475726F616D2D6775657374
+                    IE: Unknown: 010882848B0C12961824
+                    IE: Unknown: 030101
+                    IE: Unknown: 2A0100
+                    IE: Unknown: 32043048606C
+                    IE: Unknown: DD06004096010102
+                    IE: Unknown: DD050040960305
+                    IE: Unknown: DD050040960B09
+                    IE: Unknown: DD050040961400
+                    IE: Unknown: DD180050F2020101830003A5000027A500004254BC0062436600
+          Cell 03 - Address: 00:23:33:A3:44:30
+                    Channel:1
+                    Frequency:2.412 GHz (Channel 1)
+                    Quality=42/70  Signal level=-68 dBm  
+                    Encryption key:on
+                    ESSID:"DEI"
+                    Bit Rates:1 Mb/s; 2 Mb/s; 5.5 Mb/s; 6 Mb/s; 9 Mb/s
+                              11 Mb/s; 12 Mb/s; 18 Mb/s
+                    Bit Rates:24 Mb/s; 36 Mb/s; 48 Mb/s; 54 Mb/s
+                    Mode:Master
+                    Extra:tsf=00000339c67c818d
+                    Extra: Last beacon: 924ms ago
+                    IE: Unknown: 0003444549
+                    IE: Unknown: 010882848B0C12961824
+                    IE: Unknown: 030101
+                    IE: Unknown: 2A0100
+                    IE: Unknown: 32043048606C
+                    IE: WPA Version 1
+                        Group Cipher : WEP-104
+                        Pairwise Ciphers (1) : TKIP
+                        Authentication Suites (1) : 802.1x
+                    IE: Unknown: DD06004096010102
+                    IE: Unknown: DD050040960305
+                    IE: Unknown: DD050040960B09
+                    IE: Unknown: DD050040961400
+                    IE: Unknown: DD180050F2020101830003A5000027A500004254BC0062436600
+morfeu@morfeu09:~$ sudo iwconfig wlan0 essid "eduroam-guest"
+morfeu@morfeu09:~$ iw
+The program 'iw' is currently not installed.  You can install it by typing:
+sudo apt-get install iw
+morfeu@morfeu09:~$ sudo apt-get install iw
+Reading package lists... Done
+Building dependency tree       
+Reading state information... Done
+The following packages were automatically installed and are no longer required:
+  linux-headers-2.6.32-21 linux-headers-2.6.32-21-generic
+Use 'apt-get autoremove' to remove them.
+The following NEW packages will be installed:
+  iw
+0 upgraded, 1 newly installed, 0 to remove and 99 not upgraded.
+Need to get 34.3kB of archives.
+After this operation, 131kB of additional disk space will be used.
+Get:1 http://pt.archive.ubuntu.com/ubuntu/ lucid/universe iw 0.9.19~ubuntu1 [34.3kB]
+Fetched 34.3kB in 0s (320kB/s)
+Selecting previously deselected package iw.
+(Reading database ... 172220 files and directories currently installed.)
+Unpacking iw (from .../iw_0.9.19~ubuntu1_i386.deb) ...
+Processing triggers for man-db ...
+Setting up iw (0.9.19~ubuntu1) ...
+morfeu@morfeu09:~$ iw
+Usage:	iw [options] command
+Options:
+	--debug		enable netlink debugging
+	--version	show version (0.9.19)
+Commands:
+	help
+	event [-t] [-f]
+	list
+	phy
+	phy <phyname> info
+	dev <devname> interface add <name> type <type> [mesh_id <meshid>] [4addr on|off] [flags <flag>*]
+	phy <phyname> interface add <name> type <type> [mesh_id <meshid>] [4addr on|off] [flags <flag>*]
+	dev <devname> del
+	dev <devname> info
+	dev
+	dev <devname> ibss join <SSID> <freq in MHz> [fixed-freq] [<fixed bssid>] [key d:0:abcde]
+	dev <devname> ibss leave
+	dev <devname> station dump
+	dev <devname> station set <MAC address> vlan <ifindex>
+	dev <devname> station set <MAC address> plink_action <open|block>
+	dev <devname> station del <MAC address>
+	dev <devname> station get <MAC address>
+	dev <devname> survey dump
+	dev <devname> mpath dump
+	dev <devname> mpath set <destination MAC address> next_hop <next hop MAC address>
+	dev <devname> mpath new <destination MAC address> next_hop <next hop MAC address>
+	dev <devname> mpath del <MAC address>
+	dev <devname> mpath get <MAC address>
+	dev <devname> scan [-u] [freq <freq>*] [ssid <ssid>*|passive]
+	dev <devname> scan trigger [freq <freq>*] [ssid <ssid>*|passive]
+	dev <devname> scan dump [-u]
+	reg get
+	reg set <ISO/IEC 3166-1 alpha2>
+	dev <devname> disconnect
+	dev <devname> connect [-w] <SSID> [<freq in MHz>] [<bssid>] [key 0:abcde d:1:6162636465]
+	dev <devname> link
+	dev <devname> get mesh_param <param>
+	phy <phyname> set netns <pid>
+	phy <phyname> set rts <rts threshold|off>
+	phy <phyname> set frag <fragmentation threshold|off>
+	dev <devname> set channel <channel> [HT20|HT40+|HT40-]
+	phy <phyname> set channel <channel> [HT20|HT40+|HT40-]
+	dev <devname> set freq <freq> [HT20|HT40+|HT40-]
+	phy <phyname> set freq <freq> [HT20|HT40+|HT40-]
+	phy <phyname> set name <new name>
+	dev <devname> set type <type>
+	dev <devname> set meshid <meshid>
+	dev <devname> set monitor <flag>*
+	dev <devname> set mesh_param <param> <value>
+
+You can omit the 'phy' or 'dev' if the identification is unique,
+e.g. "iw wlan0 info" or "iw phy0 info". (Don't when scripting.)
+
+Do NOT screenscrape this tool, we don't consider its output stable.
+
+morfeu@morfeu09:~$ iw
+Usage:	iw [options] command
+Options:
+	--debug		enable netlink debugging
+	--version	show version (0.9.19)
+Commands:
+	help
+	event [-t] [-f]
+	list
+	phy
+	phy <phyname> info
+	dev <devname> interface add <name> type <type> [mesh_id <meshid>] [4addr on|off] [flags <flag>*]
+	phy <phyname> interface add <name> type <type> [mesh_id <meshid>] [4addr on|off] [flags <flag>*]
+	dev <devname> del
+	dev <devname> info
+	dev
+	dev <devname> ibss join <SSID> <freq in MHz> [fixed-freq] [<fixed bssid>] [key d:0:abcde]
+	dev <devname> ibss leave
+	dev <devname> station dump
+	dev <devname> station set <MAC address> vlan <ifindex>
+	dev <devname> station set <MAC address> plink_action <open|block>
+	dev <devname> station del <MAC address>
+	dev <devname> station get <MAC address>
+	dev <devname> survey dump
+	dev <devname> mpath dump
+	dev <devname> mpath set <destination MAC address> next_hop <next hop MAC address>
+	dev <devname> mpath new <destination MAC address> next_hop <next hop MAC address>
+	dev <devname> mpath del <MAC address>
+	dev <devname> mpath get <MAC address>
+	dev <devname> scan [-u] [freq <freq>*] [ssid <ssid>*|passive]
+	dev <devname> scan trigger [freq <freq>*] [ssid <ssid>*|passive]
+	dev <devname> scan dump [-u]
+	reg get
+	reg set <ISO/IEC 3166-1 alpha2>
+	dev <devname> disconnect
+	dev <devname> connect [-w] <SSID> [<freq in MHz>] [<bssid>] [key 0:abcde d:1:6162636465]
+	dev <devname> link
+	dev <devname> get mesh_param <param>
+	phy <phyname> set netns <pid>
+	phy <phyname> set rts <rts threshold|off>
+	phy <phyname> set frag <fragmentation threshold|off>
+	dev <devname> set channel <channel> [HT20|HT40+|HT40-]
+	phy <phyname> set channel <channel> [HT20|HT40+|HT40-]
+	dev <devname> set freq <freq> [HT20|HT40+|HT40-]
+	phy <phyname> set freq <freq> [HT20|HT40+|HT40-]
+	phy <phyname> set name <new name>
+	dev <devname> set type <type>
+	dev <devname> set meshid <meshid>
+	dev <devname> set monitor <flag>*
+	dev <devname> set mesh_param <param> <value>
+
+You can omit the 'phy' or 'dev' if the identification is unique,
+e.g. "iw wlan0 info" or "iw phy0 info". (Don't when scripting.)
+
+Do NOT screenscrape this tool, we don't consider its output stable.
+
+morfeu@morfeu09:~$ sudo iw dev wlan0 interface add mon0 type monitor
+morfeu@morfeu09:~$ iwconfig
+lo        no wireless extensions.
+
+eth0      no wireless extensions.
+
+wlan0     IEEE 802.11bgn  ESSID:off/any  
+          Mode:Managed  Access Point: Not-Associated   Tx-Power=20 dBm   
+          Retry  long limit:7   RTS thr:off   Fragment thr:off
+          Power Management:on
+          
+mon0      IEEE 802.11bgn  Mode:Monitor  Tx-Power=20 dBm   
+          Retry  long limit:7   RTS thr:off   Fragment thr:off
+          Power Management:off
+          
+morfeu@morfeu09:~$ wireshark
+dumpcap: There are no interfaces on which a capture can be done
+morfeu@morfeu09:~$ dumpk
+No command 'dumpk' found, did you mean:
+ Command 'dump' from package 'dump' (universe)
+dumpk: command not found
+morfeu@morfeu09:~$ dumpk
+No command 'dumpk' found, did you mean:
+ Command 'dump' from package 'dump' (universe)
+dumpk: command not found
+morfeu@morfeu09:~$ dumppk
+dumppk: command not found
+morfeu@morfeu09:~$ dumpk
+No command 'dumpk' found, did you mean:
+ Command 'dump' from package 'dump' (universe)
+dumpk: command not found
+morfeu@morfeu09:~$ dumpcap
+dumpcap: There are no interfaces on which a capture can be done
+morfeu@morfeu09:~$ sudo dumpcap -i mon0 -a duration:30
+The capture session could not be initiated (mon0: That device is not up).
+Please check to make sure you have sufficient permissions, and that you have the proper interface or pipe specified.
+morfeu@morfeu09:~$ sudo dumpcap -i mon0 -a duration:30 -o output.pca
+dumpcap: invalid option -- 'o'
+dumpcap: Invalid Option: -o
+
+Usage: dumpcap [options] ...
+
+Capture interface:
+  -i <interface>           name or idx of interface (def: first non-loopback)
+  -f <capture filter>      packet filter in libpcap filter syntax
+  -s <snaplen>             packet snapshot length (def: 65535)
+  -p                       don't capture in promiscuous mode
+  -y <link type>           link layer type (def: first appropriate)
+  -D                       print list of interfaces and exit
+  -L                       print list of link-layer types of iface and exit
+  -S                       print statistics for each interface once every second
+  -M                       for -D, -L, and -S produce machine-readable output
+
+Stop conditions:
+  -c <packet count>        stop after n packets (def: infinite)
+  -a <autostop cond.> ...  duration:NUM - stop after NUM seconds
+                           filesize:NUM - stop this file after NUM KB
+                              files:NUM - stop after NUM files
+Output (files):
+  -w <filename>            name of file to save (def: tempfile)
+  -b <ringbuffer opt.> ... duration:NUM - switch to next file after NUM secs
+                           filesize:NUM - switch to next file after NUM KB
+                              files:NUM - ringbuffer: replace after NUM files
+  -n                       use pcapng format instead of pcap
+Miscellaneous:
+  -v                       print version information and exit
+  -h                       display this help and exit
+
+Example: dumpcap -i eth0 -a duration:60 -w output.pcap
+"Capture network packets from interface eth0 until 60s passed into output.pcap"
+
+Use Ctrl-C to stop capturing at any time.
+morfeu@morfeu09:~$ sudo dumpcap -i mon0 -a duration:30 -w output.pca
+The capture session could not be initiated (mon0: That device is not up).
+Please check to make sure you have sufficient permissions, and that you have the proper interface or pipe specified.
+morfeu@morfeu09:~$ sudo ifconfig mon0 up
+morfeu@morfeu09:~$ sudo ifconfig
+eth0      Link encap:Ethernet  HWaddr 48:5b:39:68:57:78  
+          inet addr:10.3.3.244  Bcast:10.3.255.255  Mask:255.255.0.0
+          inet6 addr: fe80::4a5b:39ff:fe68:5778/64 Scope:Link
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:357641105 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:13336 errors:0 dropped:0 overruns:0 carrier:3
+          collisions:0 txqueuelen:1000 
+          RX bytes:20743419 (20.7 MB)  TX bytes:1760538 (1.7 MB)
+          Interrupt:29 
+
+lo        Link encap:Local Loopback  
+          inet addr:127.0.0.1  Mask:255.0.0.0
+          inet6 addr: ::1/128 Scope:Host
+          UP LOOPBACK RUNNING  MTU:16436  Metric:1
+          RX packets:19 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:19 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:0 
+          RX bytes:1505 (1.5 KB)  TX bytes:1505 (1.5 KB)
+
+mon0      Link encap:UNSPEC  HWaddr 1C-4B-D6-DB-81-4B-30-30-00-00-00-00-00-00-00-00  
+          UP BROADCAST RUNNING MULTICAST  MTU:1500  Metric:1
+          RX packets:415 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:0 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:82408 (82.4 KB)  TX bytes:0 (0.0 B)
+
+wlan0     Link encap:Ethernet  HWaddr 1c:4b:d6:db:81:4b  
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+          RX packets:132675 errors:0 dropped:0 overruns:0 frame:0
+          TX packets:480 errors:0 dropped:0 overruns:0 carrier:0
+          collisions:0 txqueuelen:1000 
+          RX bytes:14520644 (14.5 MB)  TX bytes:74993 (74.9 KB)
+
+wlan0:avahi Link encap:Ethernet  HWaddr 1c:4b:d6:db:81:4b  
+          inet addr:169.254.9.4  Bcast:169.254.255.255  Mask:255.255.0.0
+          UP BROADCAST MULTICAST  MTU:1500  Metric:1
+
+morfeu@morfeu09:~$ sudo iwconfig mon0 scan
+iwconfig: unknown command "scan"
+morfeu@morfeu09:~$ sudo iwconfig mon0
+mon0      IEEE 802.11bgn  Mode:Monitor  Tx-Power=20 dBm   
+          Retry  long limit:7   RTS thr:off   Fragment thr:off
+          Power Management:off
+          
+morfeu@morfeu09:~$ sudo iwlist mon0 scan
+mon0      Interface doesn't support scanning : Operation not supported
+
+morfeu@morfeu09:~$ sudo dumpcap -i mon0 -a duration:30 -w output.pca
+The file to which the capture would be saved ("output.pca") could not be opened: Permission denied.
+
+morfeu@morfeu09:~$ touch output.pca
+morfeu@morfeu09:~$ sudo dumpcap -i mon0 -a duration:30 -w output.pca
+The file to which the capture would be saved ("output.pca") could not be opened: Permission denied.
+
+morfeu@morfeu09:~$ rm output.pca
+morfeu@morfeu09:~$ sudo dumpcap -i mon0 -a duration:30 -w output.pca
+The file to which the capture would be saved ("output.pca") could not be opened: Permission denied.
+
+morfeu@morfeu09:~$ ls
+Applications  Desktop  Documents  Downloads  examples.desktop  Music  Pictures  Public  Stuff  Templates  Videos  wireless
+morfeu@morfeu09:~$ sudo dumpcap -i mon0 -a duration:30 -w tst
+The file to which the capture would be saved ("tst") could not be opened: Permission denied.
+
+morfeu@morfeu09:~$ dumpcap -i mon0 -a duration:30 -w output.pca
+The capture session could not be initiated (socket: Operation not permitted).
+Please check to make sure you have sufficient permissions, and that you have the proper interface or pipe specified.
+morfeu@morfeu09:~$ sudo dumpcap -i mon0 -a duration:30 -w output.pca
+The file to which the capture would be saved ("output.pca") could not be opened: Permission denied.
+
+morfeu@morfeu09:~$ su -
+Password: 
+root@morfeu09:~# dumpcap -i mon0 -a duration:30 -w output.pca
+File: output.pca
+Packets: 4297 Packets dropped: 0
+root@morfeu09:~# cp output
+output      output.pca  
+root@morfeu09:~# cp output.pca /home/morfeu/
+root@morfeu09:~# chown morfeu output.pca  && chgrp morfeu && cp output.pca /home/morfeu/
+chgrp: missing operand after `morfeu'
+Try `chgrp --help' for more information.
+root@morfeu09:~# chown morfeu output.pca  && chgrp morfeu output.pca && cp output.pca /home/morfeu/
+root@morfeu09:~# chown morfeu output.pca  && chgrp morfeu output.pca && chmod a+rw && cp output.pca /home/morfeu/
+chmod: missing operand after `a+rw'
+Try `chmod --help' for more information.
+root@morfeu09:~# chown morfeu output.pca  && chgrp morfeu output.pca && chmod a+rw output.pca && cp output.pca /home/morfeu/
+root@morfeu09:~# ls -la
+total 9640
+drwx------ 12 root   root      4096 2011-02-23 16:22 .
+drwxr-xr-x 22 root   root      4096 2011-01-22 11:45 ..
+-rw-------  1 root   root       590 2011-01-22 15:13 .bash_history
+-rw-r--r--  1 root   root      3102 2010-10-30 16:26 .bashrc
+drwx------  2 root   root      4096 2010-10-30 17:01 .cache
+drwx------  3 root   root      4096 2010-06-15 03:47 .dbus
+-rw-r--r--  1 root   root         0 2010-10-30 17:17 FARTO
+drwx------  2 root   root      4096 2011-01-22 11:47 .gconf
+drwx------  2 root   root      4096 2011-01-22 11:47 .gconfd
+drwx------  3 root   root      4096 2010-06-15 03:47 .gnome2
+drwx------  2 root   root      4096 2010-06-15 03:47 .gnome2_private
+-rw-r--r--  1 root   root         0 2010-10-30 18:08 output
+-rw-r--r--  1 root   root         0 2010-10-30 18:06 _output
+-rw-rw-rw-  1 morfeu morfeu  960234 2011-02-23 16:22 output.pca
+-rw-r--r--  1 root   root       140 2010-04-23 10:45 .profile
+drwx------  2 root   root      4096 2010-06-15 03:45 .pulse
+-rw-------  1 root   root       256 2010-06-15 03:45 .pulse-cookie
+-rw-r--r--  1 root   root   1216812 2010-11-04 19:57 run_1.dump
+-rw-r--r--  1 root   root        24 2010-11-04 17:01 run1.dump
+-rw-r--r--  1 root   root   1258684 2010-11-04 19:58 run_2.dump
+-rw-r--r--  1 root   root        24 2010-11-04 20:00 run_3.dump
+-rw-r--r--  1 root   root     25504 2010-11-04 20:01 run_4.dump
+-rw-r--r--  1 root   root     20104 2010-11-04 20:03 run_5.dump
+-rw-r--r--  1 root   root   1135788 2010-11-04 20:07 run_6.dump
+-rw-r--r--  1 root   root   1919272 2010-11-04 20:09 run_7.dump
+-rw-r--r--  1 root   root      1374 2010-11-04 22:14 run_8.dump
+-rw-r--r--  1 root   root   3236197 2010-11-04 22:51 runs.tar.bz2
+drwx------  2 root   root      4096 2010-10-30 17:01 .ssh
+drwx------  3 root   root      4096 2011-01-22 11:39 .synaptic
+drwxr-xr-x  2 root   root      4096 2010-04-29 12:35 .wapi
+root@morfeu09:~# ls -la output
+-rw-r--r-- 1 root root 0 2010-10-30 18:08 output
+root@morfeu09:~# ls -la output.pca 
+-rw-rw-rw- 1 morfeu morfeu 960234 2011-02-23 16:22 output.pca
+root@morfeu09:~# chown morfeu output.pca  && chgrp morfeu output.pca && chmod a+rw output.pca && cp output.pca /home/morfeu/^C
+root@morfeu09:~# rm /home/morfeu/output.pca 
+root@morfeu09:~# chown morfeu output.pca  && chgrp morfeu output.pca && chmod a+rw output.pca && cp output.pca /home/morfeu/
+root@morfeu09:~# ^C
+root@morfeu09:~# touch configurationFile.wireless
+root@morfeu09:~# nano configurationFile.wireless 
+root@morfeu09:~# nano configurationFile.wireless 
+Use "fg" to return to nano.
+
+[1]+  Stopped                 nano configurationFile.wireless
+root@morfeu09:~# nano configurationFile.wireless 
+Use "fg" to return to nano.
+
+[2]+  Stopped                 nano configurationFile.wireless
+root@morfeu09:~# fg
+nano configurationFile.wireless
+root@morfeu09:~# fg
+nano configurationFile.wireless
+root@morfeu09:~# fg
+-su: fg: current: no such job
+root@morfeu09:~# nano configurationFile.wireless 
+root@morfeu09:~# rm configurationFile.wireless 
+root@morfeu09:~# touch configurationFile.wireless
+root@morfeu09:~# 
+
