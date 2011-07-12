@@ -5,9 +5,10 @@
                    displayName="Header Files"
                    projectFiles="true"
                    kind="SOURCE_LOGICAL_FOLDER">
-      <itemPath>../C Files/ExternalVariables.h</itemPath>
-      <itemPath>../C Files/FunctionPrototypes.h</itemPath>
-      <itemPath>../C Files/Structures.h</itemPath>
+      <itemPath>Algorithms.h</itemPath>
+      <itemPath>Map.h</itemPath>
+      <itemPath>Robot.h</itemPath>
+      <itemPath>Structures.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
                    displayName="Resource Files"
@@ -19,9 +20,10 @@
                    displayName="Source Files"
                    projectFiles="true"
                    kind="SOURCE_LOGICAL_FOLDER">
-      <itemPath>../C Files/Algorithms.cpp</itemPath>
-      <itemPath>../C Files/Localizer.cpp</itemPath>
-      <itemPath>../C Files/MeanAndSDCalcs.cpp</itemPath>
+      <itemPath>Algorithms.cpp</itemPath>
+      <itemPath>Localizer.cpp</itemPath>
+      <itemPath>Map.cpp</itemPath>
+      <itemPath>Robot.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"

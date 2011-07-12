@@ -33,9 +33,10 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/_ext/1363287317/MeanAndSDCalcs.o \
-	${OBJECTDIR}/_ext/1363287317/Algorithms.o \
-	${OBJECTDIR}/_ext/1363287317/Localizer.o
+	${OBJECTDIR}/Robot.o \
+	${OBJECTDIR}/Localizer.o \
+	${OBJECTDIR}/Map.o \
+	${OBJECTDIR}/Algorithms.o
 
 
 # C Compiler Flags
@@ -62,20 +63,25 @@ dist/Release/MinGW_1-Windows/localization.exe: ${OBJECTFILES}
 	${MKDIR} -p dist/Release/MinGW_1-Windows
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/localization ${OBJECTFILES} ${LDLIBSOPTIONS} 
 
-${OBJECTDIR}/_ext/1363287317/MeanAndSDCalcs.o: ../C\ Files/MeanAndSDCalcs.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1363287317
+${OBJECTDIR}/Robot.o: Robot.cpp 
+	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1363287317/MeanAndSDCalcs.o ../C\ Files/MeanAndSDCalcs.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/Robot.o Robot.cpp
 
-${OBJECTDIR}/_ext/1363287317/Algorithms.o: ../C\ Files/Algorithms.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1363287317
+${OBJECTDIR}/Localizer.o: Localizer.cpp 
+	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1363287317/Algorithms.o ../C\ Files/Algorithms.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/Localizer.o Localizer.cpp
 
-${OBJECTDIR}/_ext/1363287317/Localizer.o: ../C\ Files/Localizer.cpp 
-	${MKDIR} -p ${OBJECTDIR}/_ext/1363287317
+${OBJECTDIR}/Map.o: Map.cpp 
+	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
-	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/_ext/1363287317/Localizer.o ../C\ Files/Localizer.cpp
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/Map.o Map.cpp
+
+${OBJECTDIR}/Algorithms.o: Algorithms.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/Algorithms.o Algorithms.cpp
 
 # Subprojects
 .build-subprojects:
