@@ -24,18 +24,27 @@ public:
     void resample();
 
     double conditionalProbCalc(double *means, double *sds, double *signalStrengths);
-    void estimator(double lX, double lY, int vertexOne, int vertexTwo);
+    void estimator(point p, Edge *edge);
 
     /* SUPPORT METHODS */
-    double distance(double x, double y, double x2, double y2);
+    double distance(point p1, point p2);
     Edge *findBestEdge(Particle &particle);
-    void calculateNewD(Particle &particle);
+    void updateDistances(Particle &particle);
+    double getRandom(double lower, double higher);
+
+    void particlesGenerator();
 
 
 private:
     Particle particles[NO_PARTICLES];
     int noAccessPoints;
     Map *map;
+
+    /* Used to perform all the mean and standard deviation calculation at a given
+     * location.
+     */
+    double currentMeans[NO_ACCESS_POINTS], previousMeans[NO_ACCESS_POINTS];
+    double currentSds[NO_ACCESS_POINTS], previousSds[NO_ACCESS_POINTS];
 
 };
 

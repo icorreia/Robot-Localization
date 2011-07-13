@@ -12,32 +12,30 @@
 
 class Map {
 public:
-    Map(int nV, int nAP);
+    Map(int nV, int nAP, int w, int h);
     Map(const Map& orig);
     virtual ~Map();
 
     /* GETTERS & SETTERS */
-    Edge *getAdjacency(int one, int two);
-    void setAdjacency(int one, int two, Edge* edge);
-
+    Edge *getEdge(int n);
+    void setEdge(int n, Edge* v);
     Vertix *getVertix(int n);
     void setVertix(int n, Vertix* v);
+    double getWidth();
+    double getHeight();
+    int getNoEdges();
     
 
 private:
-    /* In the adjacency matrix, if the value i,j is different from
-     * NULL, then we have a link between node i and node j. In that
-     * cell, we will have the information about that edge.
-     */
-    //Edge **adjacencyMatrix;
-    Edge *adjacencyMatrix[NO_VERTICES][NO_VERTICES];
+    /* Records the information concerning the edges. */
+    Edge *edges[NO_EDGES];
 
     /* Records the information about the vertices. */
-    //Vertix *vertices;
     Vertix *vertices[NO_VERTICES];
 
     /* Number of vertices in the map. */
-    int noVertices, noAccessPoints;
+    int noVertices, noEdges, noAccessPoints;
+    int width, height;
 
 };
 

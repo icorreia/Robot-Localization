@@ -8,23 +8,12 @@
 #include "Map.h"
 #include <iostream>
 
-Map::Map(int nV, int nAP)
+Map::Map(int nV, int nAP, int w, int h)
 {
     noVertices = nV;
     noAccessPoints = nAP;
-
-    /* Initializes the adjacency matrix, as well as the array that will hold the
-     * list of vertices.
-     */
-    //adjacencyMatrix = (Edge **)malloc(sizeof(Edge *)*noVertices*noVertices);
-    //vertices = (Vertix *)malloc(sizeof(Vertix)*noVertices);
-
-    /* Cleans the working space. */
-    for (int i = 0; i < noVertices; i++)
-            for (int j = 0; j < noVertices; j++)
-                    adjacencyMatrix[i][j] = NULL;
-
-    
+    width = w;
+    height = h;
 
 }
 
@@ -39,9 +28,13 @@ Map::~Map()
 }
 
 /* GETTERS & SETTERS */
-
-Edge * Map::getAdjacency(int one, int two) { return adjacencyMatrix[one][two]; }
-void Map::setAdjacency(int one, int two, Edge* edge) { adjacencyMatrix[one][two] = edge; }
+Edge *Map::getEdge(int n) { return edges[n]; }
+void Map::setEdge(int n, Edge* v) { edges[n] = v;}
 
 Vertix *Map::getVertix(int n) { return vertices[n]; }
 void Map::setVertix(int n, Vertix* v) { vertices[n] = v;}
+
+double Map::getWidth() { return width; }
+double Map::getHeight() { return height; }
+
+int Map::getNoEdges() { return noEdges;}

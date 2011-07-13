@@ -33,6 +33,7 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/MotionModel.o \
 	${OBJECTDIR}/Robot.o \
 	${OBJECTDIR}/Localizer.o \
 	${OBJECTDIR}/Map.o \
@@ -62,6 +63,11 @@ LDLIBSOPTIONS=
 dist/Release/MinGW_1-Windows/localization.exe: ${OBJECTFILES}
 	${MKDIR} -p dist/Release/MinGW_1-Windows
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/localization ${OBJECTFILES} ${LDLIBSOPTIONS} 
+
+${OBJECTDIR}/MotionModel.o: MotionModel.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/MotionModel.o MotionModel.cpp
 
 ${OBJECTDIR}/Robot.o: Robot.cpp 
 	${MKDIR} -p ${OBJECTDIR}

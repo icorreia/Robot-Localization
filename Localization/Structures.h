@@ -11,11 +11,14 @@
 #define threshold 0.1
 #define NO_PARTICLES 10
 #define NO_VERTICES 10
+#define NO_EDGES 9
 #define NO_ACCESS_POINTS 5
 
 #define PI 3.14159265358979323846
 #define NEPER 2.71828182845904523536
 #define EPSILON 1
+
+#include "Space.h"
 
 /* The structures that are used by the localizer, namely information about
  * the vertices, the edges and so on.
@@ -23,18 +26,19 @@
 
 typedef struct
 {
-	double x, y;
-	/* These two arrays will hold the information about the
-	 * the signal mean and standard deviation to each access
-	 * point in the map.
-	 */
-	double *signalMeans;
-	double *signalSDs;
+    point position;
+    /* These two arrays will hold the information about the
+     * the signal mean and standard deviation to each access
+     * point in the map.
+     */
+    double signalMeans[NO_ACCESS_POINTS];
+    double signalSDs[NO_ACCESS_POINTS];
 }Vertix;
 
 typedef struct
 {
 	double width, length;
+        Vertix *begin, *end;
 }Edge;
 
 /* A given particle used in the Monte Carlo Localization. */
@@ -43,7 +47,7 @@ typedef struct
     Edge* edge;
     double d; // The project location of the particle on the edge.
     double offset;
-    double x, y;
+    point position;
     double angle; // The orientation of the particle with respect to the global reference frame.
     double w; // The normalized weight
     double wC; // The map constrained weight of the particle (calculed on the Constraint step).
