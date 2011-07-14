@@ -19,6 +19,7 @@
 #define EPSILON 1
 
 #include "Space.h"
+#include <cmath>
 
 /* The structures that are used by the localizer, namely information about
  * the vertices, the edges and so on.
@@ -41,6 +42,12 @@ typedef struct
         Vertix *begin, *end;
 }Edge;
 
+typedef struct
+{
+	point position;
+        double strength;
+}AccessPoint;
+
 /* A given particle used in the Monte Carlo Localization. */
 typedef struct
 {
@@ -54,6 +61,10 @@ typedef struct
 
 
 }Particle;
+
+
+/* SUPPORT FUNCTIONS*/
+double distanceBetweenPoints(point p1, point p2);
 
 #endif	/* STRUCTURES_H */
 

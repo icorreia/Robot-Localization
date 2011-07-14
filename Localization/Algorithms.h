@@ -27,7 +27,6 @@ public:
     void estimator(point p, Edge *edge);
 
     /* SUPPORT METHODS */
-    double distance(point p1, point p2);
     Edge *findBestEdge(Particle &particle);
     void updateDistances(Particle &particle);
     double getRandom(double lower, double higher);

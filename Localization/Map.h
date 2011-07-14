@@ -16,6 +16,10 @@ public:
     Map(const Map& orig);
     virtual ~Map();
 
+    void learningPhase();
+    double getSignalStrengthMean(int function, double strength, double distance);
+    double getSignalStrengthSD();
+
     /* GETTERS & SETTERS */
     Edge *getEdge(int n);
     void setEdge(int n, Edge* v);
@@ -32,6 +36,9 @@ private:
 
     /* Records the information about the vertices. */
     Vertix *vertices[NO_VERTICES];
+
+    /* Records the information about the strength of each access point. */
+    AccessPoint accessPoints[NO_ACCESS_POINTS];
 
     /* Number of vertices in the map. */
     int noVertices, noEdges, noAccessPoints;

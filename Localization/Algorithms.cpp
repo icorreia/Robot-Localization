@@ -141,9 +141,9 @@ void Algorithms::estimator(point p, Edge *edge)
         Vertix *v1 = edge->begin, *v2 = edge->end;
 	int i;
 
-	firstDist = distance(p, v1->position);
-	secondDist = distance(p, v2->position);
-	distVertices = distance(v1->position, v2->position);
+	firstDist = distanceBetweenPoints(p, v1->position);
+	secondDist = distanceBetweenPoints(p, v2->position);
+	distVertices = distanceBetweenPoints(v1->position, v2->position);
 
 	/* For each component (from 1 to the number of access points),
 	 * we calculate the array of means and standard deviations, as
@@ -208,10 +208,6 @@ double Algorithms::conditionalProbCalc(double *means, double *sds, double *signa
 
 
 /* SUPPORT METHODS */
-double Algorithms::distance(point p1, point p2)
-{
-    return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
-}
 
 /* Finds the best edge associated with a given particle.*/
 Edge* Algorithms::findBestEdge(Particle &particle)
