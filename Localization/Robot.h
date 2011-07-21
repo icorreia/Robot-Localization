@@ -9,16 +9,24 @@
 #define	ROBOT_H
 
 #include "Space.h"
+#include "MotionModel.h"
+#include "Structures.h"
 
 class Robot {
 public:
-    Robot();
+    Robot(point p, vector dir);
     Robot(const Robot& orig);
     virtual ~Robot();
+
+    void moveRobot(int move);
+    void printPosition();
+
 private:
-    double speed;
     point position;
     vector direction;
+
+    MotionModel motionModel;
+    
     
 };
 

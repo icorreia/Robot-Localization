@@ -10,6 +10,7 @@
 #include <cmath>
 #include <ctime>
 #include <cstdlib>
+#include <iostream>
 
 using namespace std;
 
@@ -21,6 +22,8 @@ Algorithms::Algorithms(int nAP, Map *m)
 
     /* Initializes all the particles on the map. */
     particlesGenerator();
+
+    cout << "Ended\n";
 }
 
 Algorithms::Algorithms(const Algorithms& orig)
@@ -34,13 +37,18 @@ Algorithms::~Algorithms()
 /* ALGORITHM */
 void Algorithms::predict()
 {
-
+    
 }
 
 
 void Algorithms::update()
 {
+    for (int i = 0; i < NO_PARTICLES; i++)
+    {
+        particles[i].w = conditionalProbCalc(particles[i]);
+    }
 
+    constraint();
     resample();
 }
 
@@ -115,16 +123,17 @@ void Algorithms::resample()
         wCsum += particle.wC;
     }
 
-    //TODO: Correct this
-    N += int(NO_PARTICLES * min(N*1.0/NO_PARTICLES, max(N*1.0/NO_PARTICLES, wCsum)));
+    N += int(NO_PARTICLES * min(N_MAX*1.0/NO_PARTICLES, max(N_MIN*1.0/NO_PARTICLES, wCsum)));
 
+    /* Just to make sure... */
+    if (N > NO_PARTICLES)
+        N = NO_PARTICLES;
+    
     for (int i = 0; i < N; i++)
     {
         Particle &particle = particles[i];
-        //TODO: Correct to prob = P(S| x, y);
-        double prob = 0;
         //TODO: Draw (x,y) with probability P(S| x, y).
-        particle.wC = particle.w = prob;
+        particle.wC = particle.w = conditionalProbCalc(particle);
         particle.offset = 0;
 
         particle.edge = findBestEdge(particle);
@@ -135,11 +144,12 @@ void Algorithms::resample()
 }
 
 /* Calculates the mean and standard deviation, page 2, equation (1) and (2). */
-void Algorithms::estimator(point p, Edge *edge)
+void Algorithms::estimator(Particle &particle)
 {
 	double firstDist, secondDist, distVertices;
-        Vertix *v1 = edge->begin, *v2 = edge->end;
+        Vertix *v1 = particle.edge->begin, *v2 = particle.edge->end;
 	int i;
+        point p = particle.position;
 
 	firstDist = distanceBetweenPoints(p, v1->position);
 	secondDist = distanceBetweenPoints(p, v2->position);
@@ -152,12 +162,9 @@ void Algorithms::estimator(point p, Edge *edge)
 	 */
 	for (i = 0; i < noAccessPoints; i++)
         {
-            /* First, saves the previous values.*/
-            previousMeans[i] = currentMeans[i];
-            previousSds[i] = currentSds[i];
             /* Then, updates the current values. */
-            currentMeans[i] = (firstDist*(v1->signalMeans[i]) + secondDist*(v2->signalMeans[i]))/(distVertices);
-            currentSds[i] = (firstDist*(v1->signalSDs[i]) + secondDist*(v2->signalSDs[i]))/(distVertices);;
+            means[i] = (firstDist*(v1->signalMeans[i]) + secondDist*(v2->signalMeans[i]))/(distVertices);
+            sds[i] = (firstDist*(v1->signalSDs[i]) + secondDist*(v2->signalSDs[i]))/(distVertices);;
 	}
 
         return;
@@ -167,8 +174,11 @@ void Algorithms::estimator(point p, Edge *edge)
 
 
 //TODO: Signal strengths must be calculated.
-double Algorithms::conditionalProbCalc(double *means, double *sds, double *signalStrengths)
+double Algorithms::conditionalProbCalc(Particle &particle)
 {
+    /* First, calculates the vectors related to signal strength. */
+    estimator(particle);
+
     /* We use this variable because if all the parcels
      * are zero, than we will return 1 and that is
      * not correct.
@@ -181,7 +191,9 @@ double Algorithms::conditionalProbCalc(double *means, double *sds, double *signa
         /* If the signal strength hasn't been registered yet (i.e, Si = 0),
          * we simply ignore it.
          */
-        if (signalStrengths[i] == 0.0)
+        double signalStrength = map->getSignalStrengthMean(LINEAR,
+                    map->getAccessPointStrength(i), distanceBetweenPoints(map->getAccessPointPosition(i), particle.position));;
+        if (signalStrength == 0.0)
             continue;
 
         /* See the formula on the second page of the paper. */
@@ -189,7 +201,7 @@ double Algorithms::conditionalProbCalc(double *means, double *sds, double *signa
         double dX = 1;
         /*TODO: Check parcel one.*/
         parcelOne = 2*EPSILON/(sqrtf(2*PI)*dX);
-        parcelTwo = pow(signalStrengths[i] - means[i], 2);
+        parcelTwo = pow(signalStrength - means[i], 2);
         parcelThree = 2*pow(sds[i], 2);
         prob = parcelOne*exp(parcelTwo/parcelThree);
 
@@ -197,12 +209,12 @@ double Algorithms::conditionalProbCalc(double *means, double *sds, double *signa
         {
             accumulatedProb *= prob;
             isNotNull = true;
-
         }
     }
 
     if (isNotNull)
         return accumulatedProb;
+    
     return 0;
 }
 
@@ -219,10 +231,10 @@ Edge* Algorithms::findBestEdge(Particle &particle)
     Edge *bestEdge;
 
     /* Goes throught all the edges and finds the min offset. */
-    for (int i = 0; i < map->getNoEdges(); i++)
+    for (int i = 0; i < NO_EDGES; i++)
     {
         Edge *edge = map->getEdge(i);
-        
+
         double x1 = edge->begin->position.x;
         double x2 = edge->end->position.x;
         double y1 = edge->begin->position.y;
@@ -234,10 +246,10 @@ Edge* Algorithms::findBestEdge(Particle &particle)
         u.y *= (y2 - y1);
 
         /* Now, we have the intersection point. */
-        
-        point intersection = particle.edge->begin->position + u;
+        point intersection = edge->begin->position + u;
         vector offsetVector = intersection - particle.position;
         double offset = sqrtf(offsetVector*offsetVector);
+
 
         if (offset < minOffset | minOffset == -1)
         {
@@ -271,10 +283,23 @@ void Algorithms::updateDistances(Particle &particle)
      * the coordinates of the particle.
      */
     vector dVector = intersection - particle.edge->begin->position;
-    vector offsetVector = intersection - particle.position;
+    //vector offsetVector = intersection - particle.position;
     particle.d = sqrtf(dVector*dVector);
-    particle.offset = sqrtf(offsetVector*offsetVector);
+    //particle.offset = sqrtf(offsetVector*offsetVector);
 
+}
+
+void Algorithms::locationBelief()
+{
+    double integral = 0;
+    double outcome = 0;
+
+    /* Calculate the integral. */
+    for (int i = 0; i <= MAP_WEIGHT; i++)
+        for (int i = 0; i <= MAP_HEIGHT; i++)
+            integral += 0;
+
+    
 }
 
 double Algorithms::getRandom(double lower, double higher)
@@ -292,10 +317,18 @@ void Algorithms::particlesGenerator()
 {
     double width = map->getWidth(), height = map->getHeight();
 
-
     for (int i = 0; i < NO_PARTICLES; i++)
     {
+        
         particles[i].position.x = getRandom(0, width);
         particles[i].position.y = getRandom(0, height);
+
+        particles[i].edge = findBestEdge(particles[i]);
+        updateDistances(particles[i]);
+
+        particles[i].angle = PI/2;
+        particles[i].w = conditionalProbCalc(particles[i]);
+        particles[i].wC = 0;
+
     }
 }

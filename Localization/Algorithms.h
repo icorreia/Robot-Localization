@@ -23,8 +23,8 @@ public:
     void constraint();
     void resample();
 
-    double conditionalProbCalc(double *means, double *sds, double *signalStrengths);
-    void estimator(point p, Edge *edge);
+    double conditionalProbCalc(Particle &particle);
+    void estimator(Particle &particle);
 
     /* SUPPORT METHODS */
     Edge *findBestEdge(Particle &particle);
@@ -32,6 +32,8 @@ public:
     double getRandom(double lower, double higher);
 
     void particlesGenerator();
+
+    void locationBelief();
 
 
 private:
@@ -42,8 +44,11 @@ private:
     /* Used to perform all the mean and standard deviation calculation at a given
      * location.
      */
-    double currentMeans[NO_ACCESS_POINTS], previousMeans[NO_ACCESS_POINTS];
-    double currentSds[NO_ACCESS_POINTS], previousSds[NO_ACCESS_POINTS];
+    double means[NO_ACCESS_POINTS];
+    double sds[NO_ACCESS_POINTS];
+
+    /* The current particle that represents the robot's location. */
+    Particle *currentParticle;
 
 };
 

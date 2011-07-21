@@ -8,13 +8,18 @@
 #ifndef MOTIONMODEL_H
 #define	MOTIONMODEL_H
 
+#include "Structures.h"
+
 class MotionModel {
 public:
     MotionModel();
     MotionModel(const MotionModel& orig);
     virtual ~MotionModel();
-private:
 
+    Move makeNextMove(int move);
+
+private:
+    Move moves[NO_MOVES];
 };
 
 #endif	/* MOTIONMODEL_H */

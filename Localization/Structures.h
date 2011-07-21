@@ -9,10 +9,19 @@
 #define	STRUCTURES_H
 
 #define threshold 0.1
-#define NO_PARTICLES 10
-#define NO_VERTICES 10
-#define NO_EDGES 9
-#define NO_ACCESS_POINTS 5
+#define NO_PARTICLES 100
+#define NO_VERTICES 6
+#define NO_EDGES 5
+#define NO_ACCESS_POINTS 4
+#define N_MAX 90
+#define N_MIN 10
+#define MAP_HEIGHT 1500
+#define MAP_WEIGHT 1500
+#define NORMALIZATION_CONSTANT 0.1
+#define NO_MOVES 10
+
+#define LINEAR 0
+#define GAUSSIAN 1
 
 #define PI 3.14159265358979323846
 #define NEPER 2.71828182845904523536
@@ -61,6 +70,15 @@ typedef struct
 
 
 }Particle;
+
+/* These variables should be seen as the rotation the robot will take and how
+ * much it will advance in the x and y direction.
+ */
+typedef struct
+{
+    double x, y;
+    vector newDirection;
+}Move;
 
 
 /* SUPPORT FUNCTIONS*/
