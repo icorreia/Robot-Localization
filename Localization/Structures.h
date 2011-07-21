@@ -77,7 +77,7 @@ typedef struct
 typedef struct
 {
     double x, y;
-    vector newDirection;
+    double rotation;
 }Move;
 
 

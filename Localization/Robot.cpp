@@ -7,36 +7,54 @@
 
 #include <iostream>
 #include "Robot.h"
+#include "RandomNumbers.h"
 
 using namespace std;
 
-Robot::Robot(point p, vector dir)
+#define MOTION_SD 0.5
+#define ROTATION_SD 0.0001
+
+Robot::Robot(point p, double a)
 {
     position = p;
-    direction = dir;
+    angle = a;
+
+    randGenerator = new RandomNumbers(0);
+    algorithms = new Algorithms(NO_ACCESS_POINTS, randGenerator);
 }
 
-Robot::Robot(const Robot& orig) {
-
-}
-
-Robot::~Robot() {
+Robot::~Robot()
+{
+    delete algorithms;
+    delete randGenerator;
 }
 
 void Robot::moveRobot(int no)
 {
+    double motionIncertity, rotationIncertity;
+    double xMotionIncrease, yMotionIncrease, angleIncrease;
+
     Move move = motionModel.makeNextMove(no);
-    /* We first rotate and then only we move. */
-    direction = move.newDirection;
-    position.x += move.x*direction.x;
-    position.y += move.y*direction.y;
+
+    rotationIncertity = randGenerator.uniform(0, ROTATION_SD);
+    motionIncertity = randGenerator.uniform(0, MOTION_SD);
+
+    xMotionIncrease = move.x + motionIncertity;
+    yMotionIncrease = move.y + motionIncertity;
+    angleIncrease = move.rotation + rotationIncertity;
+    
+    angle += angleIncrease;
+    position.x += xMotionIncrease;
+    position.y += yMotionIncrease;
+
+    algorithms->predict(xMotionIncrease, yMotionIncrease, angleIncrease);
+    algorithms->update();
     
 }
 
 void Robot::printPosition()
 {
     cout << " The robot is in the (" << position.x << ", " << position.y
-            << "), with direction (" << direction.x << ", " << direction.y
-            << ")" << endl;
+            << "), with angle " << angle << "." << endl;
 }
 

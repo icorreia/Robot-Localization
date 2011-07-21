@@ -15,29 +15,29 @@
 using namespace std;
 
 /* CONSTRUCTORS & DESTRUCTORS */
-Algorithms::Algorithms(int nAP, Map *m)
+Algorithms::Algorithms(int nAP, RandomNumbers *rG)
 {
     noAccessPoints = nAP;
-    map = m;
+    randGenerator = rG;
+
+    map = new Map(NO_VERTICES, NO_ACCESS_POINTS, 1500, 1500);
 
     /* Initializes all the particles on the map. */
     particlesGenerator();
-
-    cout << "Ended\n";
-}
-
-Algorithms::Algorithms(const Algorithms& orig)
-{
 }
 
 Algorithms::~Algorithms()
 {
+    delete map;
 }
 
 /* ALGORITHM */
-void Algorithms::predict()
+void Algorithms::predict(double xMotionIncrease, double yMotionIncrease, double angleIncrease)
 {
-    
+    for (int i = 0; i < NO_PARTICLES; i++)
+    {
+        
+    }
 }
 
 
@@ -302,16 +302,6 @@ void Algorithms::locationBelief()
     
 }
 
-double Algorithms::getRandom(double lower, double higher)
-{
-    /* Sets the initial seed. */
-    srand((unsigned)time(0));
-    /* We are looking for a three decimal precision.*/
-    int range=(higher*100 - lower)+1;
-
-    return (lower+int(range*rand()/(RAND_MAX + 1.0)))/100.0;
-}
-
 /* Method to generate all the particles. */
 void Algorithms::particlesGenerator()
 {
@@ -320,8 +310,8 @@ void Algorithms::particlesGenerator()
     for (int i = 0; i < NO_PARTICLES; i++)
     {
         
-        particles[i].position.x = getRandom(0, width);
-        particles[i].position.y = getRandom(0, height);
+        particles[i].position.x = randGenerator.uniform(0, width);
+        particles[i].position.y = randGenerator.uniform(0, height);
 
         particles[i].edge = findBestEdge(particles[i]);
         updateDistances(particles[i]);

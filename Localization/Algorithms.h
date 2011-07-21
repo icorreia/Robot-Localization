@@ -7,18 +7,19 @@
 
 #include "Structures.h"
 #include "Map.h"
+#include "RandomNumbers.h"
 
 #ifndef ALGORITHMS_H
 #define	ALGORITHMS_H
 
 class Algorithms {
 public:
-    Algorithms(int nAP, Map *m);
+    Algorithms(int nAP, Map *m, RandomNumbers *rG);
     Algorithms(const Algorithms& orig);
     virtual ~Algorithms();
 
     /* The methods that make the algorithm itself. */
-    void predict();
+    void predict(double xMotionIncrease, double yMotionIncrease, double angleIncrease);
     void update();
     void constraint();
     void resample();
@@ -40,6 +41,7 @@ private:
     Particle particles[NO_PARTICLES];
     int noAccessPoints;
     Map *map;
+    RandomNumbers *randGenerator;
 
     /* Used to perform all the mean and standard deviation calculation at a given
      * location.

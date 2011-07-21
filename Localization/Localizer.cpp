@@ -5,45 +5,35 @@
 #include "Map.h"
 #include "Algorithms.h"
 #include "Robot.h"
+#include "RandomNumbers.h"
 
 using namespace std;
 
-Map *map;
-Algorithms *algorithms;
-Robot *robot;
-
-void simulation()
+void simulation(Robot *robot)
 {
 
     for (int i = 0; i < NO_MOVES; i++)
     {
         robot->moveRobot(i);
         //robot->printPosition();
-        algorithms->update();
     }
-
-    
+  
 }
 
 
 int main()
 {
-        map = new Map(NO_VERTICES, NO_ACCESS_POINTS, 1500, 1500);
-        algorithms = new Algorithms(NO_ACCESS_POINTS, map);
-        point startPoint = {1200, 0};
-        vector startDirection = {0, 1};
-        robot = new Robot(startPoint, startDirection);
+    point startPoint = {1200, 0};
+    Robot *robot = new Robot(startPoint, 0);
 
-        /* Strats the simulation of the algorithm. */
-        simulation();
+    /* Strats the simulation of the algorithm. */
+    simulation(robot);
 
-	/* Frees the allocated space. */
-        delete map;
-        delete algorithms;
+    delete robot;
 
-        cout << endl << "SIMULATION SUCCESSFULY TERMINATED!\n";
+    cout << endl << "SIMULATION SUCCESSFULY TERMINATED!\n";
 
-	return 0;
+    return 0;
 }
 
 /* SUPPORT FUNCTIONS */

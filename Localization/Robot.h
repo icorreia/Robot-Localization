@@ -14,8 +14,7 @@
 
 class Robot {
 public:
-    Robot(point p, vector dir);
-    Robot(const Robot& orig);
+    Robot(point p, double a);
     virtual ~Robot();
 
     void moveRobot(int move);
@@ -23,11 +22,11 @@ public:
 
 private:
     point position;
-    vector direction;
+    double angle;
+    RandomNumbers *randGenerator;
 
     MotionModel motionModel;
-    
-    
+    Algorithms *algorithms;
 };
 
 #endif	/* ROBOT_H */
