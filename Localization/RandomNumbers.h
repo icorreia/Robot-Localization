@@ -6,9 +6,10 @@
  */
 
 #ifndef RANDOM_NUMBERS_H
-#define	RANDOM_NUMBER_H
+#define	RANDOM_NUMBERS_H
 
 #include "Structures.h"
+#include <iostream>
 
 class RandomNumbers {
 public:
@@ -17,7 +18,7 @@ public:
     double uniform(double lower, double higher);
 
 private:
-    boolean hasExtraNumber = false;
+    bool hasExtraNumber;
     double secondNumber;
     int seed;
 };

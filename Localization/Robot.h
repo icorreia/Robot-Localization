@@ -11,6 +11,8 @@
 #include "Space.h"
 #include "MotionModel.h"
 #include "Structures.h"
+#include "RandomNumbers.h"
+#include "Algorithms.h"
 
 class Robot {
 public:
@@ -20,13 +22,15 @@ public:
     void moveRobot(int move);
     void printPosition();
 
+    Algorithms *algorithms;
+
 private:
     point position;
     double angle;
     RandomNumbers *randGenerator;
 
     MotionModel motionModel;
-    Algorithms *algorithms;
+    
 };
 
 #endif	/* ROBOT_H */

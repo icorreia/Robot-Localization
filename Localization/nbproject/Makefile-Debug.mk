@@ -33,6 +33,7 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
+	${OBJECTDIR}/RandomNumbers.o \
 	${OBJECTDIR}/MotionModel.o \
 	${OBJECTDIR}/Robot.o \
 	${OBJECTDIR}/Localizer.o \
@@ -63,6 +64,11 @@ LDLIBSOPTIONS=
 dist/Debug/MinGW_1-Windows/localization.exe: ${OBJECTFILES}
 	${MKDIR} -p dist/Debug/MinGW_1-Windows
 	${LINK.cc} -o ${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/localization ${OBJECTFILES} ${LDLIBSOPTIONS} 
+
+${OBJECTDIR}/RandomNumbers.o: RandomNumbers.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -g -MMD -MP -MF $@.d -o ${OBJECTDIR}/RandomNumbers.o RandomNumbers.cpp
 
 ${OBJECTDIR}/MotionModel.o: MotionModel.cpp 
 	${MKDIR} -p ${OBJECTDIR}

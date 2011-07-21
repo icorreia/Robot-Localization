@@ -14,7 +14,7 @@
 
 class Algorithms {
 public:
-    Algorithms(int nAP, Map *m, RandomNumbers *rG);
+    Algorithms(int nAP, RandomNumbers *rG);
     Algorithms(const Algorithms& orig);
     virtual ~Algorithms();
 
@@ -29,8 +29,9 @@ public:
 
     /* SUPPORT METHODS */
     Edge *findBestEdge(Particle &particle);
-    void updateDistances(Particle &particle);
-    double getRandom(double lower, double higher);
+    void updateDistance(Particle &particle);
+    double calculateOffset(Particle &particle, Edge *edge);
+    point calculateIntersectionPoint(Particle &particle, Edge *edge);
 
     void particlesGenerator();
 

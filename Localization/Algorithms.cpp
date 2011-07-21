@@ -36,7 +36,11 @@ void Algorithms::predict(double xMotionIncrease, double yMotionIncrease, double 
 {
     for (int i = 0; i < NO_PARTICLES; i++)
     {
-        
+        particles[i].angle += angleIncrease;
+        particles[i].position.x += xMotionIncrease;
+        particles[i].position.y += yMotionIncrease;
+        particles[i].offset = calculateOffset(particles[i], particles[i].edge);
+        updateDistance(particles[i]);
     }
 }
 
@@ -73,7 +77,7 @@ void Algorithms::constraint()
                 /* Updates the new edge associated with this particle. */
                 edge = particle.edge = newEdge;
 
-                updateDistances(particle);
+                updateDistance(particle);
 
                 particle.offset = 0;
             }
@@ -137,7 +141,7 @@ void Algorithms::resample()
         particle.offset = 0;
 
         particle.edge = findBestEdge(particle);
-        updateDistances(particle);
+        updateDistance(particle);
 
     }
 
@@ -146,29 +150,28 @@ void Algorithms::resample()
 /* Calculates the mean and standard deviation, page 2, equation (1) and (2). */
 void Algorithms::estimator(Particle &particle)
 {
-	double firstDist, secondDist, distVertices;
-        Vertix *v1 = particle.edge->begin, *v2 = particle.edge->end;
-	int i;
-        point p = particle.position;
+    double firstDist, secondDist, distVertices;
+    Vertix *v1 = particle.edge->begin, *v2 = particle.edge->end;
+    int i;
+    point p = particle.position;
 
-	firstDist = distanceBetweenPoints(p, v1->position);
-	secondDist = distanceBetweenPoints(p, v2->position);
-	distVertices = distanceBetweenPoints(v1->position, v2->position);
+    firstDist = distanceBetweenPoints(p, v1->position);
+    secondDist = distanceBetweenPoints(p, v2->position);
+    distVertices = distanceBetweenPoints(v1->position, v2->position);
 
-	/* For each component (from 1 to the number of access points),
-	 * we calculate the array of means and standard deviations, as
-	 * described by the formulas (1) and (2) on the second page of
-	 * the paper.
-	 */
-	for (i = 0; i < noAccessPoints; i++)
-        {
-            /* Then, updates the current values. */
-            means[i] = (firstDist*(v1->signalMeans[i]) + secondDist*(v2->signalMeans[i]))/(distVertices);
-            sds[i] = (firstDist*(v1->signalSDs[i]) + secondDist*(v2->signalSDs[i]))/(distVertices);;
-	}
+    /* For each component (from 1 to the number of access points),
+     * we calculate the array of means and standard deviations, as
+     * described by the formulas (1) and (2) on the second page of
+     * the paper.
+     */
+    for (i = 0; i < noAccessPoints; i++)
+    {
+        /* Then, updates the current values. */
+        means[i] = (firstDist*(v1->signalMeans[i]) + secondDist*(v2->signalMeans[i]))/(distVertices);
+        sds[i] = (firstDist*(v1->signalSDs[i]) + secondDist*(v2->signalSDs[i]))/(distVertices);;
+    }
 
-        return;
-
+    return;
 }
 
 
@@ -234,22 +237,7 @@ Edge* Algorithms::findBestEdge(Particle &particle)
     for (int i = 0; i < NO_EDGES; i++)
     {
         Edge *edge = map->getEdge(i);
-
-        double x1 = edge->begin->position.x;
-        double x2 = edge->end->position.x;
-        double y1 = edge->begin->position.y;
-        double y2 = edge->end->position.y;
-
-        vector u = edge->end->position - edge->begin->position;
-
-        u.x *= (x2 - x1);
-        u.y *= (y2 - y1);
-
-        /* Now, we have the intersection point. */
-        point intersection = edge->begin->position + u;
-        vector offsetVector = intersection - particle.position;
-        double offset = sqrtf(offsetVector*offsetVector);
-
+        double offset = calculateOffset(particle, edge);
 
         if (offset < minOffset | minOffset == -1)
         {
@@ -261,32 +249,45 @@ Edge* Algorithms::findBestEdge(Particle &particle)
     return bestEdge;
 }
 
+double Algorithms::calculateOffset(Particle &particle, Edge *edge)
+{
+    point intersection = calculateIntersectionPoint(particle, edge);
+    
+    vector offsetVector = intersection - particle.position;
+    double offset = sqrtf(offsetVector*offsetVector);
+
+    return offset;
+}
+
 /* This method should only be called after updating the edge best associated
  * with this particle.
- * See: http://paulbourke.net/geometry/pointline/
  */
-void Algorithms::updateDistances(Particle &particle)
+void Algorithms::updateDistance(Particle &particle)
 {
-    double x1 = particle.edge->begin->position.x;
-    double x2 = particle.edge->end->position.x;
-    double y1 = particle.edge->begin->position.y;
-    double y2 = particle.edge->end->position.y;
+    point intersection = calculateIntersectionPoint(particle, particle.edge);
 
-    vector u = particle.edge->end->position - particle.edge->begin->position;
-    u.x *= (x2 - x1);
-    u.y *= (y2 - y1);
-    /* Now, we have the intersection point. */
-    point intersection = particle.edge->begin->position + u;
-    /* To update the distances, namely the offset of the particle to the edge
-     * as well as the value of d, we have to use the distance between the
-     * intersection point calculated above and the beginning of the edge and
-     * the coordinates of the particle.
-     */
     vector dVector = intersection - particle.edge->begin->position;
-    //vector offsetVector = intersection - particle.position;
     particle.d = sqrtf(dVector*dVector);
-    //particle.offset = sqrtf(offsetVector*offsetVector);
 
+}
+
+/* See: http://softsurfer.com/Archive/algorithm_0102/algorithm_0102.htm
+ *  or: http://paulbourke.net/geometry/pointline/
+ */
+point Algorithms::calculateIntersectionPoint(Particle &particle, Edge *edge)
+{
+    vector v = edge->end->position - edge->begin->position;
+    vector w = particle.position - edge->begin->position;
+
+    double c1 = w*v;
+    if ( c1 <= 0 )
+        return edge->begin->position;
+
+    double c2 = v*v;
+    if ( c2 <= c1 )
+        return edge->end->position;
+
+    return edge->begin->position + (c1 / c2) * v;
 }
 
 void Algorithms::locationBelief()
@@ -310,11 +311,11 @@ void Algorithms::particlesGenerator()
     for (int i = 0; i < NO_PARTICLES; i++)
     {
         
-        particles[i].position.x = randGenerator.uniform(0, width);
-        particles[i].position.y = randGenerator.uniform(0, height);
+        particles[i].position.x = randGenerator->uniform(0, width);
+        particles[i].position.y = randGenerator->uniform(0, height);
 
         particles[i].edge = findBestEdge(particles[i]);
-        updateDistances(particles[i]);
+        updateDistance(particles[i]);
 
         particles[i].angle = PI/2;
         particles[i].w = conditionalProbCalc(particles[i]);

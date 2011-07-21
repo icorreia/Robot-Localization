@@ -36,8 +36,8 @@ void Robot::moveRobot(int no)
 
     Move move = motionModel.makeNextMove(no);
 
-    rotationIncertity = randGenerator.uniform(0, ROTATION_SD);
-    motionIncertity = randGenerator.uniform(0, MOTION_SD);
+    rotationIncertity = randGenerator->uniform(0, ROTATION_SD);
+    motionIncertity = randGenerator->uniform(0, MOTION_SD);
 
     xMotionIncrease = move.x + motionIncertity;
     yMotionIncrease = move.y + motionIncertity;
