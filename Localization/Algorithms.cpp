@@ -41,6 +41,8 @@ void Algorithms::predict(double xMotionIncrease, double yMotionIncrease, double 
         particles[i].offset = calculateOffset(particles[i], particles[i].edge);
         updateDistance(particles[i]);
     }
+
+    constraint();
 }
 
 
@@ -48,10 +50,9 @@ void Algorithms::update()
 {
     for (int i = 0; i < NO_PARTICLES; i++)
     {
-        particles[i].w = conditionalProbCalc(particles[i]);
+        particles[i].w = calculateParticleProbability(particles[i]);
     }
 
-    constraint();
     resample();
 }
 
@@ -128,12 +129,18 @@ void Algorithms::resample()
     /* Just to make sure... */
     if (N > NO_PARTICLES)
         N = NO_PARTICLES;
-    
+
+    //DEBUG PRINT
+    cout << "The best particle goes for x: " << particles[NO_PARTICLES-1].position.x
+            << " and y: " << particles[NO_PARTICLES-1].position.y << endl;
+
+    return;
+
     for (int i = 0; i < N; i++)
     {
         Particle &particle = particles[i];
         //TODO: Draw (x,y) with probability P(S| x, y).
-        particle.wC = particle.w = conditionalProbCalc(particle);
+        particle.wC = particle.w = calculateParticleProbability(particle);
         particle.offset = 0;
 
         particle.edge = findBestEdge(particle);
@@ -145,7 +152,7 @@ void Algorithms::resample()
 
 /* Calculates the mean and standard deviation, page 2, equation (1) and (2). */
 //TODO: Change this name to a more appropriate one.
-void Algorithms::estimator(Particle &particle)
+void Algorithms::calculateSignalStrengthVectors(Particle &particle)
 {
     double firstDist, secondDist, distVertices;
     Vertix *v1 = particle.edge->begin, *v2 = particle.edge->end;
@@ -163,8 +170,8 @@ void Algorithms::estimator(Particle &particle)
      */
     for (i = 0; i < noAccessPoints; i++)
     {
-        means[i] = (firstDist*(v1->signalMeans[i]) + secondDist*(v2->signalMeans[i]))/(distVertices);
-        sds[i] = (firstDist*(v1->signalSDs[i]) + secondDist*(v2->signalSDs[i]))/(distVertices);;
+        particle.means[i] = (firstDist*(v1->signalMeans[i]) + secondDist*(v2->signalMeans[i]))/(distVertices);
+        particle.sds[i] = (firstDist*(v1->signalSDs[i]) + secondDist*(v2->signalSDs[i]))/(distVertices);;
     }
 
     return;
@@ -173,10 +180,10 @@ void Algorithms::estimator(Particle &particle)
 
 
 //TODO: Maybe a better name.
-double Algorithms::conditionalProbCalc(Particle &particle)
+double Algorithms::calculateParticleProbability(Particle &particle)
 {
     /* First, calculates the vectors related to signal strength. */
-    estimator(particle);
+    calculateSignalStrengthVectors(particle);
 
     /* We use this variable because if all the parcels
      * are zero, than we will return 1 and that is
@@ -200,8 +207,8 @@ double Algorithms::conditionalProbCalc(Particle &particle)
         double dX = 1;
         /*TODO: Check parcel one.*/
         parcelOne = 2*EPSILON/(sqrtf(2*PI)*dX);
-        parcelTwo = pow(signalStrength - means[i], 2);
-        parcelThree = 2*pow(sds[i], 2);
+        parcelTwo = pow(signalStrength - particle.means[i], 2);
+        parcelThree = 2*pow(particle.sds[i], 2);
         prob = parcelOne*exp(parcelTwo/parcelThree);
 
         if (prob != 0)
@@ -313,8 +320,12 @@ void Algorithms::particlesGenerator()
         updateDistance(particles[i]);
 
         particles[i].angle = PI/2;
-        particles[i].w = conditionalProbCalc(particles[i]);
+        particles[i].w = 1.0/NO_PARTICLES;
         particles[i].wC = 0;
+
+        //DEBUG PRINT
+        /*cout << "We have (" << particles[i].position.x << ", " << particles[i].position.y
+                << ")" << endl;*/
 
     }
 }

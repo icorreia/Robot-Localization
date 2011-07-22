@@ -13,8 +13,6 @@
 class Map {
 public:
     Map(int nV, int nAP, int w, int h);
-    Map(const Map& orig);
-    virtual ~Map();
 
     void buildMap();
     void learningPhase();

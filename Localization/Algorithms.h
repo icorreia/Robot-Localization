@@ -24,8 +24,8 @@ public:
     void constraint();
     void resample();
 
-    double conditionalProbCalc(Particle &particle);
-    void estimator(Particle &particle);
+    double calculateParticleProbability(Particle &particle);
+    void calculateSignalStrengthVectors(Particle &particle);
 
     /* SUPPORT METHODS */
     Edge *findBestEdge(Particle &particle);
@@ -43,12 +43,6 @@ private:
     int noAccessPoints;
     Map *map;
     RandomNumbers *randGenerator;
-
-    /* Used to perform all the mean and standard deviation calculation at a given
-     * location.
-     */
-    double means[NO_ACCESS_POINTS];
-    double sds[NO_ACCESS_POINTS];
 
     /* TODO: Necessary?
      * The current particle that represents the robot's location. */

@@ -15,7 +15,7 @@
 
 RandomNumbers::RandomNumbers(int seed)
 {
-    this->seed = seed;
+    srand(seed);
     hasExtraNumber = false;
 }
 
@@ -49,12 +49,11 @@ double RandomNumbers::normal(double mean,double sd){
 
 double RandomNumbers::uniform(double lower, double higher)
 {
-    srand(seed);
     /* We are looking for a three decimal precision and that's why
      * we multiple it by 100 and then, when returning, divide it
      * by 100.0.*/
-    int range=(higher*100 - lower)+1;
+    int range=(higher*100 - lower) + 1;
 
-    return (lower+int(range*rand()/(RAND_MAX + 1.0)))/100.0;
+    return (lower + int(range*(rand()/(RAND_MAX + 1.0))))/100.0;
 }
 

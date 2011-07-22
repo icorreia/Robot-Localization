@@ -20,7 +20,6 @@ public:
 private:
     bool hasExtraNumber;
     double secondNumber;
-    int seed;
 };
 
 #endif	/* RANDOM_NUMBERS_H */

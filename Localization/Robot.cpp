@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#include <ctime>
 #include "Robot.h"
 #include "RandomNumbers.h"
 
@@ -19,7 +20,7 @@ Robot::Robot(point p, double a)
     position = p;
     angle = a;
 
-    randGenerator = new RandomNumbers(0);
+    randGenerator = new RandomNumbers((unsigned) time(0));
     algorithms = new Algorithms(NO_ACCESS_POINTS, randGenerator);
 }
 
@@ -53,7 +54,7 @@ void Robot::moveRobot(int no)
     position.x += xMotionIncrease;
     position.y += yMotionIncrease;
 
-    algorithms->predict(xMotionIncrease, yMotionIncrease, angleIncrease);
+    //algorithms->predict(xMotionIncrease, yMotionIncrease, angleIncrease);
     algorithms->update();
     
 }

@@ -9,7 +9,7 @@
 #define	STRUCTURES_H
 
 #define threshold 0.1
-#define NO_PARTICLES 100
+#define NO_PARTICLES 500
 #define NO_VERTICES 6
 #define NO_EDGES 5
 #define NO_ACCESS_POINTS 4
@@ -64,6 +64,12 @@ typedef struct
     double angle; // The orientation of the particle with respect to the global reference frame.
     double w; // The normalized weight
     double wC; // The map constrained weight of the particle (calculed on the Constraint step).
+
+    /* Used to perform all the mean and standard deviation calculation at a given
+     * location.
+     */
+    double means[NO_ACCESS_POINTS];
+    double sds[NO_ACCESS_POINTS];
 
 
 }Particle;
