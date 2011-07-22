@@ -8,7 +8,6 @@
 #ifndef SPACE_H
 #define	SPACE_H
 
-/* The struct that defines a given point. */
 struct point
 {
     double x, y;
@@ -21,7 +20,6 @@ struct point
     }
 };
 
-/* The struct that defines a given vector. */
 struct vector
 {
     double x, y;
@@ -41,7 +39,6 @@ struct vector
     }
 };
 
-/* Redefinition of operations over points. */
 inline point operator * (double t, const point &p)
 {
     point p2 = {p.x * t, p.y * t};
@@ -60,7 +57,7 @@ inline vector operator - (const point &p1, const point &p2)
     return v;
 }
 
-/* Redefinition of operations involving points and vectors. */
+
 
 inline point operator + (const point &p, const vector &v)
 {
@@ -74,7 +71,8 @@ inline point operator - (const point &p, const vector &v)
     return p2;
 }
 
-/* Redefinition of operations over vectors. */
+
+
 inline vector operator + (const vector &v1, const vector &v2)
 {
     vector v = {v1.x + v2.x, v1.y + v2.y};

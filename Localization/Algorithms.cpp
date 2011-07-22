@@ -14,7 +14,6 @@
 
 using namespace std;
 
-/* CONSTRUCTORS & DESTRUCTORS */
 Algorithms::Algorithms(int nAP, RandomNumbers *rG)
 {
     noAccessPoints = nAP;
@@ -31,7 +30,7 @@ Algorithms::~Algorithms()
     delete map;
 }
 
-/* ALGORITHM */
+
 void Algorithms::predict(double xMotionIncrease, double yMotionIncrease, double angleIncrease)
 {
     for (int i = 0; i < NO_PARTICLES; i++)
@@ -56,12 +55,10 @@ void Algorithms::update()
     resample();
 }
 
-/* This function must be called numberOfParticles times. */
 void Algorithms::constraint()
 {
     double wCsum = 0;
 
-    /* Goes throught all the particles. */
     for (int i = 0; i < NO_PARTICLES; i++)
     {
         Particle &particle = particles[i];
@@ -72,13 +69,13 @@ void Algorithms::constraint()
         {
             Edge *newEdge = findBestEdge(particle);
 
+            /* Updates the new edge associated with this particle, as well
+             * as all the other information associated with, namely the distance
+             * to the origin of the edge and the offset. */
             if (newEdge != edge)
             {
-                /* Updates the new edge associated with this particle. */
                 edge = particle.edge = newEdge;
-
                 updateDistance(particle);
-
                 particle.offset = 0;
             }
         }
@@ -98,7 +95,7 @@ void Algorithms::constraint()
 
 }
 
-
+/* By increasing order of wC. */
 int sortParticles(const void *a, const void *b)
 {
     const Particle *ia = (const Particle *)a;
@@ -123,7 +120,6 @@ void Algorithms::resample()
         if (particle.wC < particles[0].wC)
             N++;
 
-        /* Performs the calculation of the sum of all wC's. */
         wCsum += particle.wC;
     }
 
@@ -148,6 +144,7 @@ void Algorithms::resample()
 }
 
 /* Calculates the mean and standard deviation, page 2, equation (1) and (2). */
+//TODO: Change this name to a more appropriate one.
 void Algorithms::estimator(Particle &particle)
 {
     double firstDist, secondDist, distVertices;
@@ -166,7 +163,6 @@ void Algorithms::estimator(Particle &particle)
      */
     for (i = 0; i < noAccessPoints; i++)
     {
-        /* Then, updates the current values. */
         means[i] = (firstDist*(v1->signalMeans[i]) + secondDist*(v2->signalMeans[i]))/(distVertices);
         sds[i] = (firstDist*(v1->signalSDs[i]) + secondDist*(v2->signalSDs[i]))/(distVertices);;
     }
@@ -176,7 +172,7 @@ void Algorithms::estimator(Particle &particle)
 
 
 
-//TODO: Signal strengths must be calculated.
+//TODO: Maybe a better name.
 double Algorithms::conditionalProbCalc(Particle &particle)
 {
     /* First, calculates the vectors related to signal strength. */
@@ -233,13 +229,12 @@ Edge* Algorithms::findBestEdge(Particle &particle)
     double minOffset = -1;
     Edge *bestEdge;
 
-    /* Goes throught all the edges and finds the min offset. */
     for (int i = 0; i < NO_EDGES; i++)
     {
         Edge *edge = map->getEdge(i);
         double offset = calculateOffset(particle, edge);
 
-        if (offset < minOffset | minOffset == -1)
+        if (offset < minOffset || minOffset == -1)
         {
             minOffset = offset;
             bestEdge = edge;
@@ -303,7 +298,7 @@ void Algorithms::locationBelief()
     
 }
 
-/* Method to generate all the particles. */
+
 void Algorithms::particlesGenerator()
 {
     double width = map->getWidth(), height = map->getHeight();

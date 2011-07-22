@@ -30,9 +30,6 @@
 #include "Space.h"
 #include <cmath>
 
-/* The structures that are used by the localizer, namely information about
- * the vertices, the edges and so on.
- */
 
 typedef struct
 {
@@ -57,7 +54,7 @@ typedef struct
         double strength;
 }AccessPoint;
 
-/* A given particle used in the Monte Carlo Localization. */
+
 typedef struct
 {
     Edge* edge;

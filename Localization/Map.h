@@ -31,16 +31,10 @@ public:
     point getAccessPointPosition(int n);
 
 private:
-    /* Records the information concerning the edges. */
     Edge edges[NO_EDGES];
-
-    /* Records the information about the vertices. */
     Vertix vertices[NO_VERTICES];
-
-    /* Records the information about the strength of each access point. */
     AccessPoint accessPoints[NO_ACCESS_POINTS];
 
-    /* Number of vertices in the map. */
     int noVertices, noEdges, noAccessPoints;
     int width, height;
 

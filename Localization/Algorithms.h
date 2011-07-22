@@ -50,7 +50,8 @@ private:
     double means[NO_ACCESS_POINTS];
     double sds[NO_ACCESS_POINTS];
 
-    /* The current particle that represents the robot's location. */
+    /* TODO: Necessary?
+     * The current particle that represents the robot's location. */
     Particle *currentParticle;
 
 };

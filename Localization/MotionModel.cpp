@@ -45,13 +45,5 @@ MotionModel::MotionModel()
     moves[9].y = 250;
 }
 
-MotionModel::MotionModel(const MotionModel& orig)
-{
-}
-
-MotionModel::~MotionModel()
-{
-}
-
 Move MotionModel::makeNextMove(int move) { return moves[move]; }
 

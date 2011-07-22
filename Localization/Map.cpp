@@ -23,16 +23,6 @@ Map::Map(int nV, int nAP, int w, int h)
     learningPhase();
 }
 
-Map::Map(const Map& orig)
-{
-    
-}
-
-Map::~Map()
-{
-
-}
-
 /* GETTERS & SETTERS */
 Edge *Map::getEdge(int n) { return &edges[n]; }
 
@@ -162,6 +152,5 @@ void Map::buildMap()
     accessPoints[3].position.x = 900;
     accessPoints[3].position.y = 1400;
     accessPoints[3].strength = 80;
-
 
 }

@@ -31,6 +31,9 @@ Robot::~Robot()
 
 void Robot::moveRobot(int no)
 {
+    /* We assume that the robot moves with gaussian error and therefore, we need
+     * to calculate incertities associated with each odometry measure.
+     */
     double motionIncertity, rotationIncertity;
     double xMotionIncrease, yMotionIncrease, angleIncrease;
 
@@ -39,6 +42,9 @@ void Robot::moveRobot(int no)
     rotationIncertity = randGenerator->uniform(0, ROTATION_SD);
     motionIncertity = randGenerator->uniform(0, MOTION_SD);
 
+    /* The predict step use these values to update the particles, and that's
+     * why we need to save them.
+     */
     xMotionIncrease = move.x + motionIncertity;
     yMotionIncrease = move.y + motionIncertity;
     angleIncrease = move.rotation + rotationIncertity;

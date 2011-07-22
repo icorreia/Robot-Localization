@@ -20,15 +20,14 @@ public:
     virtual ~Robot();
 
     void moveRobot(int move);
-    void printPosition();
-
-    Algorithms *algorithms;
+    //TODO: May eventually be removed later.
+    void printPosition();  
 
 private:
     point position;
-    double angle;
+    double angle; //The orientation of the robot
     RandomNumbers *randGenerator;
-
+    Algorithms *algorithms;
     MotionModel motionModel;
     
 };

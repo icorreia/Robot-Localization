@@ -13,8 +13,6 @@
 class MotionModel {
 public:
     MotionModel();
-    MotionModel(const MotionModel& orig);
-    virtual ~MotionModel();
 
     Move makeNextMove(int move);
 
