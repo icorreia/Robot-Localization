@@ -16,7 +16,7 @@
 #define N_MAX 90
 #define N_MIN 10
 #define MAP_HEIGHT 1500
-#define MAP_WEIGHT 1500
+#define MAP_WIDTH 1500
 #define NORMALIZATION_CONSTANT 0.1
 #define NO_MOVES 10
 
@@ -65,12 +65,14 @@ typedef struct
     double w; // The normalized weight
     double wC; // The map constrained weight of the particle (calculed on the Constraint step).
 
+    /* TODO: Debug purposes only. */
+    int id;
+
     /* Used to perform all the mean and standard deviation calculation at a given
      * location.
      */
     double means[NO_ACCESS_POINTS];
     double sds[NO_ACCESS_POINTS];
-
 
 }Particle;
 

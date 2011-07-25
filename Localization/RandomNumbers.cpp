@@ -5,12 +5,10 @@
  * Created on 21 de Julho de 2011, 20:15
  */
 
-#include "Structures.h"
 #include "RandomNumbers.h"
+#include "Structures.h"
 #include <iostream>
-#include <cstdio>
 #include <cstdlib>
-#include <cmath>
 
 
 RandomNumbers::RandomNumbers(int seed)

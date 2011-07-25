@@ -12,16 +12,19 @@
 
 using namespace std;
 
-#define MOTION_SD 0.5
-#define ROTATION_SD 0.0001
+#define MOTION_SD 2
+#define ROTATION_SD 0.1
 
 Robot::Robot(point p, double a)
 {
-    position = p;
-    angle = a;
-
+    location.position = p;
+    location.angle = a;
+    
     randGenerator = new RandomNumbers((unsigned) time(0));
+
     algorithms = new Algorithms(NO_ACCESS_POINTS, randGenerator);
+
+    std::cout << "What?\n";
 }
 
 Robot::~Robot()
@@ -50,18 +53,24 @@ void Robot::moveRobot(int no)
     yMotionIncrease = move.y + motionIncertity;
     angleIncrease = move.rotation + rotationIncertity;
     
-    angle += angleIncrease;
-    position.x += xMotionIncrease;
-    position.y += yMotionIncrease;
+    location.angle += move.rotation;
+    location.position.x += move.x;
+    location.position.y += move.y;
 
-    //algorithms->predict(xMotionIncrease, yMotionIncrease, angleIncrease);
-    algorithms->update();
+    location.edge = algorithms->findBestEdge(location);
+    algorithms->updateDistance(location);
+    location.offset = algorithms->calculateOffset(location, location.edge);
+
     
+
+    algorithms->predict(xMotionIncrease, yMotionIncrease, angleIncrease);
+    algorithms->update();
+    algorithms->locationBelief(location);
 }
 
 void Robot::printPosition()
 {
-    cout << " The robot is in the (" << position.x << ", " << position.y
-            << "), with angle " << angle << "." << endl;
+    cout << " The robot is in the (" << location.position.x << ", " << location.position.y
+            << "), with angle " << location.angle << "." << endl;
 }
 

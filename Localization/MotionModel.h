@@ -13,7 +13,8 @@
 class MotionModel {
 public:
     MotionModel();
-
+    void setMotionModelOne();
+    void setMotionModelTwo();
     Move makeNextMove(int move);
 
 private:

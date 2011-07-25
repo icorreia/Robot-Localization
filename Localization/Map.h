@@ -14,7 +14,8 @@ class Map {
 public:
     Map(int nV, int nAP, int w, int h);
 
-    void buildMap();
+    void buildMapOne();
+    void buildMapTwo();
     void learningPhase();
     double getSignalStrengthMean(int function, double strength, double distance);
     double getSignalStrengthSD();

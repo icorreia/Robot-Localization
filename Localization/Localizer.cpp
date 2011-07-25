@@ -11,6 +11,7 @@ using namespace std;
 
 void simulation(Robot *robot)
 {
+    cout << endl << "STARTING SIMULATION...\n";
 
     for (int i = 0; i < NO_MOVES; i++)
     {
@@ -23,11 +24,14 @@ void simulation(Robot *robot)
 
 int main()
 {
-    point startPoint = {1200, 0};
+    point startPoint = {180, 0};
     Robot *robot = new Robot(startPoint, 0);
+    //TestBench bench;
+    //bench.calculateParticleProbability();
 
     /* Strats the simulation of the algorithm. */
     simulation(robot);
+
 
     delete robot;
 
@@ -37,4 +41,10 @@ int main()
 }
 
 /* SUPPORT FUNCTIONS */
-double distanceBetweenPoints(point p1, point p2) { return sqrt(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2)); }
+double distanceBetweenPoints(point p1, point p2)
+{
+    double no = sqrtf(pow(p1.x - p2.x, 2) + pow(p1.y - p2.y, 2));
+    if (no == 0)
+        cout << no << endl;
+    return no;
+}

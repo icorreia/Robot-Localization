@@ -12,6 +12,8 @@
 #ifndef ALGORITHMS_H
 #define	ALGORITHMS_H
 
+#define RESAMPLE_RANGE 300
+
 class Algorithms {
 public:
     Algorithms(int nAP, RandomNumbers *rG);
@@ -24,18 +26,14 @@ public:
     void constraint();
     void resample();
 
-    double calculateParticleProbability(Particle &particle);
+    double calculateParticleProbability(Particle *particle);
     void calculateSignalStrengthVectors(Particle &particle);
-
-    /* SUPPORT METHODS */
     Edge *findBestEdge(Particle &particle);
     void updateDistance(Particle &particle);
     double calculateOffset(Particle &particle, Edge *edge);
     point calculateIntersectionPoint(Particle &particle, Edge *edge);
-
     void particlesGenerator();
-
-    void locationBelief();
+    void locationBelief(Particle &particle);
 
 
 private:
@@ -44,9 +42,10 @@ private:
     Map *map;
     RandomNumbers *randGenerator;
 
-    /* TODO: Necessary?
-     * The current particle that represents the robot's location. */
+    /* The current particle that represents the robot's location. */
     Particle *currentParticle;
+
+
 
 };
 

@@ -14,13 +14,17 @@ double functionSD = 1/50.0;
 
 Map::Map(int nV, int nAP, int w, int h)
 {
+    
     noVertices = nV;
     noAccessPoints = nAP;
     width = w;
     height = h;
 
-    buildMap();
+    
+    buildMapOne();
     learningPhase();
+
+    
 }
 
 /* GETTERS & SETTERS */
@@ -66,13 +70,13 @@ double Map::getSignalStrengthMean(int function, double strength, double distance
 
 double Map::getSignalStrengthSD()
 {
-    return 0.2;
+    return 5;
 }
 
 double Map::getAccessPointStrength(int n) { return accessPoints[n].strength; }
 point Map::getAccessPointPosition(int n) { return accessPoints[n].position; }
 
-void Map::buildMap()
+void Map::buildMapOne()
 {
     /* Map Format
      *
@@ -152,5 +156,82 @@ void Map::buildMap()
     accessPoints[3].position.x = 900;
     accessPoints[3].position.y = 1400;
     accessPoints[3].strength = 80;
+
+}
+
+
+void Map::buildMapTwo()
+{
+    /* Map Format
+     *
+     *  -> 4 accesspoints
+     *  -> 250 vertices
+     *  -> 249 edges
+     *
+     *  Units: Meters
+     *
+     *    --------------------------------- 200
+     *    |           |                   |
+     *    |           |         A         |
+     *    |           |                   |
+     *    |           |                   |
+     *    |           |                   |
+     *    |           |                   |
+     *    |           |               A   |
+     *    |    A      |-------------      |  100
+     *    |                        |      |
+     *    |                        |      |
+     *    |                        |      |
+     *    |                        |      |  
+     *    |               A        |      |
+     *    |                        |      |
+     *    |                        |      |  
+     *    |                        |      |
+     *    --------------------------------- 0
+     *   0       130              180    200
+     */
+
+    /* Vertices */
+    for (int i = 0; i <= 100; i++)
+    {
+        vertices[i].position.x = 180;
+        vertices[i].position.y = i;
+    }
+
+    for (int i = 0; i < 50; i++)
+    {
+        vertices[101 + i].position.x = 179 - i;
+        vertices[101 + i].position.y = 100;
+    }
+
+    for (int i = 1; i <= 100; i++)
+    {
+        vertices[150 + i].position.x = 130;
+        vertices[150 + i].position.y = 100 + i;
+    }
+    
+
+    /* Edges */
+    for (int i = 0; i < NO_EDGES; i++)
+    {
+        edges[i].width = 5;
+        edges[i].length = 1;
+        edges[i].begin = &vertices[i];
+        edges[i].end = &vertices[i + 1];
+    }
+
+    /* Access Points*/
+    accessPoints[0].position.x = 150;
+    accessPoints[0].position.y = 50;
+    accessPoints[0].strength = -60;
+    accessPoints[1].position.x = 70;
+    accessPoints[1].position.y = 100;
+    accessPoints[1].strength = -80;
+    accessPoints[2].position.x = 190;
+    accessPoints[2].position.y = 120;
+    accessPoints[2].strength = -100;
+    accessPoints[3].position.x = 170;
+    accessPoints[3].position.y = 180;
+    accessPoints[3].strength = -80;
 
 }

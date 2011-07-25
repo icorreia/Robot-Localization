@@ -24,8 +24,13 @@ public:
     void printPosition();  
 
 private:
-    point position;
-    double angle; //The orientation of the robot
+    /* This particle will represent the real position of the robot. It's only
+     * needed for simulation purposes, as, when collecting signal strengths,
+     * we cannot simply rely on the position of the current particle to estimate
+     * values, as it may not be the true position of the robot.
+     */
+    Particle location;
+
     RandomNumbers *randGenerator;
     Algorithms *algorithms;
     MotionModel motionModel;
