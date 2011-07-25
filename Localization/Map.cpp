@@ -21,7 +21,7 @@ Map::Map(int nV, int nAP, int w, int h)
     height = h;
 
     
-    buildMapOne();
+    buildMapTwo();
     learningPhase();
 
     

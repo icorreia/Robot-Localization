@@ -13,7 +13,7 @@ void simulation(Robot *robot)
 {
     cout << endl << "STARTING SIMULATION...\n";
 
-    for (int i = 0; i < NO_MOVES; i++)
+    for (int i = 0; i < 20; i++)
     {
         robot->moveRobot(i);
         //robot->printPosition();

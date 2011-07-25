@@ -7,10 +7,11 @@
 
 #include "MotionModel.h"
 #include "Structures.h"
+#include <iostream>
 
 MotionModel::MotionModel()
 {
-    setMotionModelOne();
+    setMotionModelTwo();
 }
 
 void MotionModel::setMotionModelOne()
@@ -83,6 +84,8 @@ void MotionModel::setMotionModelTwo()
         moves[301 + i].x = 0;
         moves[301 + i].y = 0.5;
     }
+
+    std::cout << "Done\n";
 
 }
 

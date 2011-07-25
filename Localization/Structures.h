@@ -10,15 +10,15 @@
 
 #define threshold 0.1
 #define NO_PARTICLES 500
-#define NO_VERTICES 6
-#define NO_EDGES 5
+#define NO_VERTICES 250
+#define NO_EDGES 249
 #define NO_ACCESS_POINTS 4
-#define N_MAX 90
-#define N_MIN 10
-#define MAP_HEIGHT 1500
-#define MAP_WIDTH 1500
+#define N_MAX 480
+#define N_MIN 200
+#define MAP_HEIGHT 200
+#define MAP_WIDTH 200
 #define NORMALIZATION_CONSTANT 0.1
-#define NO_MOVES 10
+#define NO_MOVES 501
 
 #define LINEAR 0
 #define GAUSSIAN 1

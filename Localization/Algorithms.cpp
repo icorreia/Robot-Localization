@@ -351,7 +351,9 @@ void Algorithms::locationBelief(Particle &particle)
      * end of the particle set.
      */
     currentParticle = &particles[NO_PARTICLES - 1];
-    
+
+
+    return;
     //DEBUG PRINT
     cout << "The best particle (no: " << particles[NO_PARTICLES-1].id << ")goes for x: " << particles[NO_PARTICLES-1].position.x
             << " and y: " << particles[NO_PARTICLES-1].position.y << endl;
