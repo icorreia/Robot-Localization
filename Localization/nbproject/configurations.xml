@@ -29,6 +29,8 @@
       <itemPath>MotionModel.cpp</itemPath>
       <itemPath>RandomNumbers.cpp</itemPath>
       <itemPath>Robot.cpp</itemPath>
+      <itemPath>TestBench.cpp</itemPath>
+      <itemPath>TestBench.h</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"

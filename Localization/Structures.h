@@ -9,16 +9,16 @@
 #define	STRUCTURES_H
 
 #define threshold 0.1
-#define NO_PARTICLES 500
-#define NO_VERTICES 250
-#define NO_EDGES 249
+#define NO_PARTICLES 121
+#define NO_VERTICES 21
+#define NO_EDGES 20
 #define NO_ACCESS_POINTS 4
-#define N_MAX 480
-#define N_MIN 200
-#define MAP_HEIGHT 200
-#define MAP_WIDTH 200
+#define N_MAX 20
+#define N_MIN 5
+#define MAP_HEIGHT 20
+#define MAP_WIDTH 20
 #define NORMALIZATION_CONSTANT 0.1
-#define NO_MOVES 501
+#define NO_MOVES 40
 
 #define LINEAR 0
 #define GAUSSIAN 1

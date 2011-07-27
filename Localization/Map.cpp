@@ -10,7 +10,7 @@
 #include <cstdio>
 #include <cmath>
 
-double functionSD = 1/50.0;
+using namespace std;
 
 Map::Map(int nV, int nAP, int w, int h)
 {
@@ -20,11 +20,12 @@ Map::Map(int nV, int nAP, int w, int h)
     width = w;
     height = h;
 
-    
-    buildMapTwo();
+    cout << "BUILDING MAP..." << endl;
+    buildMapThree();
+    cout << "MAP BUILT!" << endl;
+    cout << "LEARNING PHASE INITIATED..." << endl;
     learningPhase();
-
-    
+    cout << "LEARNING PHASE CONCLUDED!" << endl;
 }
 
 /* GETTERS & SETTERS */
@@ -59,18 +60,33 @@ void Map::learningPhase()
 
 double Map::getSignalStrengthMean(int function, double strength, double distance)
 {
+    double functionSD = 1;
+    double value;
+    
     switch(function)
     {
         case LINEAR:
-            return -functionSD*distance + strength;
+            value =  functionSD*distance + strength;
+            break;
         case GAUSSIAN:
-            return (1.0/sqrtf(2*PI*pow(functionSD, 2))*pow(NEPER, -pow(distance, 2)/(2*pow(functionSD, 2))))*strength;
+            value =  (1.0/sqrtf(2*PI*pow(functionSD, 2))*pow(NEPER, -pow(distance, 2)/(2*pow(functionSD, 2))))*strength;
+            break;
+        default:
+            break;
     }
+
+    /* We are dealing with signal strengths, we are by nature negative numbers.
+     * Therefore, we have to cut off positive values modeled by our function.
+     */
+    if (value > 0.0)
+        return 0;
+
+    return value;
 }
 
 double Map::getSignalStrengthSD()
 {
-    return 5;
+    return 2;
 }
 
 double Map::getAccessPointStrength(int n) { return accessPoints[n].strength; }
@@ -167,6 +183,7 @@ void Map::buildMapTwo()
      *  -> 4 accesspoints
      *  -> 250 vertices
      *  -> 249 edges
+     *  -> 529 particles
      *
      *  Units: Meters
      *
@@ -232,6 +249,62 @@ void Map::buildMapTwo()
     accessPoints[2].strength = -100;
     accessPoints[3].position.x = 170;
     accessPoints[3].position.y = 180;
+    accessPoints[3].strength = -80;
+
+}
+
+void Map::buildMapThree()
+{
+    /* Map Format
+     *
+     *  -> 4 accesspoints
+     *  -> 21 vertices
+     *  -> 20 edges
+     *  -> 25 particles
+     *
+     *  Units: Meters
+     *
+     *    ------------------- 20
+     *    |        |       A|
+     *    |        |        |
+     *    |A       |        |
+     *    |        |        |
+     *    |        |       A|
+     *    |        |        |
+     *    |        |        |
+     *    |A       |        |
+     *    ------------------- 0
+     *   0        10       20
+     */
+
+    /* Vertices */
+    for (int i = 0; i <= 20; i++)
+    {
+        vertices[i].position.x = 10;
+        vertices[i].position.y = i;
+    }
+
+    /* Edges */
+    for (int i = 0; i < NO_EDGES; i++)
+    {
+        edges[i].width = 5;
+        edges[i].length = 1;
+        edges[i].begin = &vertices[i];
+        edges[i].end = &vertices[i + 1];
+    }
+
+    /* Access Points*/
+    accessPoints[0].position.x = 0;
+    accessPoints[0].position.y = 0;
+    accessPoints[0].strength = -60;
+    accessPoints[1].position.x = 20;
+    accessPoints[1].position.y = 8;
+    accessPoints[1].strength = -80;
+    accessPoints[2].position.x = 0;
+    accessPoints[2].position.y = 16;
+    accessPoints[2].strength = -100;
+    accessPoints[3].position.x = 20;
+    accessPoints[3].position.y = 20;
     accessPoints[3].strength = -80;
 
 }

@@ -15,6 +15,9 @@ public:
     void test();
     double calculateParticleProbability();
 
+    point calculateIntersectionPoint(Particle &particle, Edge *edge);
+    double calculateOffset();
+
 private:
 
 };

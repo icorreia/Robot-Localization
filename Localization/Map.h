@@ -16,6 +16,7 @@ public:
 
     void buildMapOne();
     void buildMapTwo();
+    void buildMapThree();
     void learningPhase();
     double getSignalStrengthMean(int function, double strength, double distance);
     double getSignalStrengthSD();

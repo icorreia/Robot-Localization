@@ -15,6 +15,7 @@ public:
     MotionModel();
     void setMotionModelOne();
     void setMotionModelTwo();
+    void setMotionModelThree();
     Move makeNextMove(int move);
 
 private:

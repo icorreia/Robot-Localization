@@ -11,6 +11,7 @@
 #include <ctime>
 #include <cstdlib>
 #include <iostream>
+#include <iomanip>
 #include <cstdio>
 
 using namespace std;
@@ -22,8 +23,14 @@ Algorithms::Algorithms(int nAP, RandomNumbers *rG)
 
     map = new Map(NO_VERTICES, NO_ACCESS_POINTS, MAP_WIDTH, MAP_HEIGHT);
 
+    isToPrint = false;
+
     /* Initializes all the particles on the map. */
+    cout << "GENERATING PARTICLES..." << endl;
     particlesGenerator();
+    cout << "PARTICLES GENERATED!" << endl;
+
+    
 }
 
 Algorithms::~Algorithms()
@@ -35,11 +42,27 @@ void Algorithms::particlesGenerator()
 {
     double width = map->getWidth(), height = map->getHeight();
 
+    /* We try to uniformly distribute all the particles accross the map.
+     * Therefore, we first get the proportion between the width and the height,
+     * so we can divide fairly among the two dimensions.
+     * For simplyfing the maths, we are assuming a square grid.
+     */
+
+    int noDividedPoints = int(sqrt(NO_PARTICLES*1.0));
+
+    double widthInterval = width/(noDividedPoints);
+    double heightInterval = height/(noDividedPoints - 1);
+
+    /* With this measures, we start distributing the particles. */
+    double wPos = 0;
+    double hPos = 0;
+
+    
     for (int i = 0; i < NO_PARTICLES; i++)
     {
 
-        particles[i].position.x = randGenerator->uniform(0, width);
-        particles[i].position.y = randGenerator->uniform(0, height);
+        particles[i].position.x = wPos;
+        particles[i].position.y = hPos;
 
         particles[i].edge = findBestEdge(particles[i]);
         updateDistance(particles[i]);
@@ -47,7 +70,7 @@ void Algorithms::particlesGenerator()
 
         particles[i].angle = PI/2;
         particles[i].w = 1.0/NO_PARTICLES;
-        particles[i].wC = 0;
+        particles[i].wC = 1.0/NO_PARTICLES;
 
         particles[i].id = i;
 
@@ -56,6 +79,14 @@ void Algorithms::particlesGenerator()
          */
         calculateSignalStrengthVectors(particles[i]);
 
+        /* Now, we have to calculate the position of the next particle. */
+        wPos += widthInterval;
+
+        if (wPos > width)
+        {
+            wPos = 0;
+            hPos += heightInterval;
+        }        
     }
 }
 
@@ -94,12 +125,13 @@ void Algorithms::constraint()
             {
                 edge = particle.edge = newEdge;
                 updateDistance(particle);
-                particle.offset = 0;
+                // WARNING: CHANGED FROM ORIGINAL PAPER
+                particle.offset = calculateOffset(particle, edge);
             }
         }
 
         if (abs(particle.offset) > edge->width)
-            particle.wC = particle.w*pow(exp(-abs(particle.offset) - edge->width/2),2);
+            particle.wC = particle.w*exp(-pow(particle.offset - edge->width/2,2));
         else
             particle.wC = particle.w;
 
@@ -119,15 +151,15 @@ Edge* Algorithms::findBestEdge(Particle &particle)
     /* The best associated edge of a given particle is the one that presents
      * the smaller offset.
      */
-    double minOffset = -1;
-    Edge *bestEdge;
+    Edge *bestEdge = map->getEdge(0);
+    double minOffset = calculateOffset(particle, bestEdge);
 
-    for (int i = 0; i < NO_EDGES; i++)
+    for (int i = 1; i < NO_EDGES; i++)
     {
         Edge *edge = map->getEdge(i);
         double offset = calculateOffset(particle, edge);
 
-        if (offset < minOffset || minOffset == -1)
+        if (offset < minOffset)
         {
             minOffset = offset;
             bestEdge = edge;
@@ -154,7 +186,8 @@ void Algorithms::calculateSignalStrengthVectors(Particle &particle)
     
     firstDist = distanceBetweenPoints(p, v1->position);
     secondDist = distanceBetweenPoints(p, v2->position);
-    distVertices = distanceBetweenPoints(v1->position, v2->position);
+    //WARNING: DIFFERENT FROM THE ORIGINAL PAPER!
+    distVertices = firstDist + secondDist;
 
     /* For each component (from 1 to the number of access points),
      * we calculate the array of means and standard deviations, as
@@ -165,8 +198,12 @@ void Algorithms::calculateSignalStrengthVectors(Particle &particle)
     
     for (int i = 0; i < noAccessPoints; i++)
     {
-        particle.means[i] = (firstDist*(v1->signalMeans[i]) + secondDist*(v2->signalMeans[i]))/(distVertices);
-        particle.sds[i] = (firstDist*(v1->signalSDs[i]) + secondDist*(v2->signalSDs[i]))/(distVertices);
+        particle.means[i] = (firstDist*(v1->signalMeans[i]) + secondDist*(v2->signalMeans[i]))/distVertices;
+        particle.sds[i] = (firstDist*(v1->signalSDs[i]) + secondDist*(v2->signalSDs[i]))/distVertices;
+
+        //printf("WAIL VALUES: %lf %lf %lf\n", firstDist*(v1->signalMeans[i]),
+        //        secondDist*(v2->signalMeans[i]),distVertices );
+        //printf("Having %.2lf and %.2lf\n", particle.means[i], particle.sds[i]);
     }
 
     return;
@@ -177,7 +214,23 @@ int sortParticles(const void *a, const void *b)
 {
     const Particle *ia = (const Particle *)a;
     const Particle *ib = (const Particle *)b;
-    return ia->wC  - ib->wC;
+
+    if (ia->wC > ib->wC)
+        return 1;
+    else if (ia->wC < ib->wC)
+        return -1;
+
+    /* Else, the values of wC are equal. So, the untie rule will be by the values
+     * of w.
+     */
+
+    if (ia->w > ib->w)
+        return 1;
+    else if (ia->w < ib->w)
+        return -1;
+
+
+    return 0;
 }
 
 void Algorithms::resample()
@@ -250,10 +303,6 @@ void Algorithms::resample()
         /* Refresh the values in the vectors. */
         calculateSignalStrengthVectors(particles[i]);
     }
-
-
-    /* At the end, we have to update the current location belief.*/
-    //locationBelief();
 }
 
 double Algorithms::calculateParticleProbability(Particle *particle)
@@ -281,9 +330,14 @@ double Algorithms::calculateParticleProbability(Particle *particle)
         p = 2*EPSILON/(sqrtf(2*PI)*distanceBetweenPoints(particle->position, map->getAccessPointPosition(i)));
         q = pow(signalStrength - particle->means[i], 2);
         r = 2*pow(particle->sds[i], 2);
-        prob = pow(p,q/r);
+        prob = p*exp(-q/r);
 
-        //TODO: printf("%lf %lf %lf\n", p, q, r);
+        if (isToPrint)
+        {
+            cout << "We have " << setprecision(2) << prob << endl;
+            printf("%.2lf %.2lf %.2lf with SS: %.2lf vs %.2lf\n", p, q, r, signalStrength, particle->means[i]);
+        }
+
         if (prob != 0)
         {
             accumulatedProb *= prob;
@@ -294,9 +348,11 @@ double Algorithms::calculateParticleProbability(Particle *particle)
     if (isNotNull)
     {
         //TODO: Debug: if (accumulatedProb > 0.5)
-        //    cout << "Returning " << accumulatedProb << endl;
+        //cout << accumulatedProb << " ";
         return accumulatedProb;
     }
+
+    //cout << "-0- ";
 
     return 0;
 }
@@ -350,20 +406,29 @@ void Algorithms::locationBelief(Particle &particle)
      * holding the most likely position of the robot will be standing at the
      * end of the particle set.
      */
+    qsort(particles, NO_PARTICLES, sizeof(Particle), sortParticles);
+
+    cout << "\nCHECKING: ";
+    for (int i = 0; i < NO_PARTICLES; i++)
+        cout << particles[i].wC << "/" << particles[i].w << "  ";
+
+    cout << "\n\n";
+    
     currentParticle = &particles[NO_PARTICLES - 1];
 
+    /*cout << "\n----------------------------------\n";
 
-    return;
-    //DEBUG PRINT
-    cout << "The best particle (no: " << particles[NO_PARTICLES-1].id << ")goes for x: " << particles[NO_PARTICLES-1].position.x
-            << " and y: " << particles[NO_PARTICLES-1].position.y << endl;
+    for (int i = 0; i < NO_PARTICLES; i++)
+        cout << particles[i].w << "  ";
+
+    cout << "----------------------------------\n"; */
 
     if (currentParticle != NULL)
     {
         
         double dist, minDist = distanceBetweenPoints(particles[0].position, particle.position);
         int no = 0;
-        for (int i = 1; i < NO_PARTICLES; i++)
+        for (int i = 0; i < NO_PARTICLES; i++)
         {
             dist = distanceBetweenPoints(particles[i].position, particle.position);
             if (dist < minDist)
@@ -373,10 +438,35 @@ void Algorithms::locationBelief(Particle &particle)
             }
         }
 
-        printf("ID: %d (%lf,%lf) against ID: %d (%lf,%lf) with DIST: %lf\n",
+        printf("(%d: %.2lf,%.2lf) against (%d: %.2lf,%.2lf)  DIST: %.2lf/%.2lf\n",
                 currentParticle->id, currentParticle->position.x, currentParticle->position.y,
-                no, particles[no].position.x, particles[no].position.y, minDist);
-        printf("PROBS: %lf against %lf\n", particles[NO_PARTICLES-1].w, particles[no].w);
+                no, particles[no].position.x, particles[no].position.y,
+                distanceBetweenPoints(currentParticle->position, particle.position), minDist);
+        printf("PROBS: %lf against %lf\n", particles[NO_PARTICLES-1].wC, particles[no].wC);
+
+        isToPrint = true;
+        cout << "LET'S SEE...\n" << calculateParticleProbability(currentParticle)
+                << "\n\nand " << calculateParticleProbability(&particles[no]) << endl;
+
+        isToPrint = false;
     }
+
+    //printParticles();
     
+}
+
+void Algorithms::printParticles()
+{
+    for (int i = 0; i < NO_PARTICLES; i++)
+    {
+        cout << "-------------------------------------------\n";
+        cout << "PARTICLE NO: " << particles[i].id << endl;
+        cout << "X: " << particles[i].position.x << " Y: " << particles[i].position.y
+                << " ANGLE: " << particles[i].angle << endl;
+        cout << "PROBS: " << particles[i].w << "/" << particles[i].wC << endl;
+        cout << "OFFSET: " << particles[i].offset << "D: " << particles[i].d << endl;
+        cout << "-------------------------------------------\n";
+    }
+
+    getchar();
 }

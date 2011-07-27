@@ -12,7 +12,7 @@
 #ifndef ALGORITHMS_H
 #define	ALGORITHMS_H
 
-#define RESAMPLE_RANGE 300
+#define RESAMPLE_RANGE 2
 
 class Algorithms {
 public:
@@ -35,6 +35,8 @@ public:
     void particlesGenerator();
     void locationBelief(Particle &particle);
 
+    /* DEBUGGING */
+    void printParticles();
 
 private:
     Particle particles[NO_PARTICLES];
@@ -44,6 +46,8 @@ private:
 
     /* The current particle that represents the robot's location. */
     Particle *currentParticle;
+
+    bool isToPrint;
 
 
 

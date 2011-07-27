@@ -8,10 +8,13 @@
 #include "MotionModel.h"
 #include "Structures.h"
 #include <iostream>
+using namespace std;
 
 MotionModel::MotionModel()
 {
-    setMotionModelTwo();
+    cout << "SETTING MOTION MODEL..." << endl;
+    setMotionModelThree();
+    cout << "MOTION MODEL SETTED!" << endl;
 }
 
 void MotionModel::setMotionModelOne()
@@ -53,14 +56,16 @@ void MotionModel::setMotionModelOne()
 
 void MotionModel::setMotionModelTwo()
 {
+
+    /* NO_MOVES: 501 */
     /* First, we have to define all the movements of the robot. A new movement
      * will be taken every 500ms, the time where each update step must be done.
      */
     for (int i = 0; i < 200; i++)
     {
-        moves[0].rotation = 0;
-        moves[0].x = 0;
-        moves[0].y = 0.5;
+        moves[i].rotation = 0;
+        moves[i].x = 0;
+        moves[i].y = 0.5;
     }
 
     moves[200].rotation = PI/2;
@@ -84,9 +89,22 @@ void MotionModel::setMotionModelTwo()
         moves[301 + i].x = 0;
         moves[301 + i].y = 0.5;
     }
+}
 
-    std::cout << "Done\n";
+void MotionModel::setMotionModelThree()
+{
+    /* NO_MOVES: 40*/
+    /* First, we have to define all the movements of the robot. A new movement
+     * will be taken every 500ms, the time where each update step must be done.
+     */
+    for (int i = 0; i < NO_MOVES; i++)
+    {
+        moves[i].rotation = 0;
+        moves[i].x = 0;
+        moves[i].y = 0.5;
+    }
 
+   
 }
 
 Move MotionModel::makeNextMove(int move) { return moves[move]; }

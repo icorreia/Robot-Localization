@@ -6,6 +6,7 @@
 #include "Algorithms.h"
 #include "Robot.h"
 #include "RandomNumbers.h"
+#include "TestBench.h"
 
 using namespace std;
 
@@ -13,29 +14,31 @@ void simulation(Robot *robot)
 {
     cout << endl << "STARTING SIMULATION...\n";
 
-    for (int i = 0; i < 20; i++)
+    for (int i = 0; i < NO_MOVES; i++)
     {
+
+        printf("ITERATION %d\n", i);
+        getchar();
+
         robot->moveRobot(i);
-        //robot->printPosition();
+        robot->printPosition();
     }
-  
+
+    cout << endl << "SIMULATION SUCCESSFULY TERMINATED!\n";
 }
 
 
 int main()
 {
-    point startPoint = {180, 0};
+    point startPoint = {10, 0};
     Robot *robot = new Robot(startPoint, 0);
     //TestBench bench;
-    //bench.calculateParticleProbability();
+    //bench.calculateOffset();
 
     /* Strats the simulation of the algorithm. */
     simulation(robot);
 
-
     delete robot;
-
-    cout << endl << "SIMULATION SUCCESSFULY TERMINATED!\n";
 
     return 0;
 }

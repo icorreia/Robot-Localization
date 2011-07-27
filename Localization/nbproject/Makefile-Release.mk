@@ -35,6 +35,7 @@ OBJECTDIR=build/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/RandomNumbers.o \
 	${OBJECTDIR}/MotionModel.o \
+	${OBJECTDIR}/TestBench.o \
 	${OBJECTDIR}/Robot.o \
 	${OBJECTDIR}/Localizer.o \
 	${OBJECTDIR}/Map.o \
@@ -74,6 +75,11 @@ ${OBJECTDIR}/MotionModel.o: MotionModel.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} $@.d
 	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/MotionModel.o MotionModel.cpp
+
+${OBJECTDIR}/TestBench.o: TestBench.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} $@.d
+	$(COMPILE.cc) -O2 -MMD -MP -MF $@.d -o ${OBJECTDIR}/TestBench.o TestBench.cpp
 
 ${OBJECTDIR}/Robot.o: Robot.cpp 
 	${MKDIR} -p ${OBJECTDIR}

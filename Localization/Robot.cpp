@@ -19,12 +19,13 @@ Robot::Robot(point p, double a)
 {
     location.position = p;
     location.angle = a;
-    
+
+    cout << "CREATING RANDOM NUMBERS INSTANCE..." << endl;
     randGenerator = new RandomNumbers((unsigned) time(0));
-
+    cout << "RANDOM NUMBERS INSTANCE CREATED!" << endl;
+    cout << "CREATING ALGORITHMS INSTANCE..." << endl;
     algorithms = new Algorithms(NO_ACCESS_POINTS, randGenerator);
-
-    std::cout << "What?\n";
+    cout << "ALGORITHMS INSTANCE CREATED!" << endl;
 }
 
 Robot::~Robot()
@@ -61,8 +62,7 @@ void Robot::moveRobot(int no)
     algorithms->updateDistance(location);
     location.offset = algorithms->calculateOffset(location, location.edge);
 
-    
-
+   
     algorithms->predict(xMotionIncrease, yMotionIncrease, angleIncrease);
     algorithms->update();
     algorithms->locationBelief(location);
