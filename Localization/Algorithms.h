@@ -37,6 +37,7 @@ public:
 
     /* DEBUGGING */
     void printParticles();
+    void printParticle(Particle &particle);
 
 private:
     Particle particles[NO_PARTICLES];

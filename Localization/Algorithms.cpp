@@ -99,9 +99,9 @@ void Algorithms::predict(double xMotionIncrease, double yMotionIncrease, double 
         particles[i].position.y += yMotionIncrease;
         particles[i].offset = calculateOffset(particles[i], particles[i].edge);
         updateDistance(particles[i]);
-    }
 
-    constraint();
+        calculateSignalStrengthVectors(particles[i]);
+    }
 }
 
 void Algorithms::constraint()
@@ -131,9 +131,17 @@ void Algorithms::constraint()
         }
 
         if (abs(particle.offset) > edge->width)
+        {
+            cout << "Here\n";
             particle.wC = particle.w*exp(-pow(particle.offset - edge->width/2,2));
+        }
         else
+        {
+            cout << "There\n";
             particle.wC = particle.w;
+        }
+
+        cout << "We have " << particle.wC << endl;
 
         wCsum += particle.wC;
 
@@ -174,6 +182,7 @@ void Algorithms::update()
     for (int i = 0; i < NO_PARTICLES; i++)
         particles[i].w = calculateParticleProbability(&particles[i]);
 
+    constraint();
     resample();
 }
 
@@ -186,8 +195,7 @@ void Algorithms::calculateSignalStrengthVectors(Particle &particle)
     
     firstDist = distanceBetweenPoints(p, v1->position);
     secondDist = distanceBetweenPoints(p, v2->position);
-    //WARNING: DIFFERENT FROM THE ORIGINAL PAPER!
-    distVertices = firstDist + secondDist;
+    distVertices = distanceBetweenPoints(v1->position, v2->position);
 
     /* For each component (from 1 to the number of access points),
      * we calculate the array of means and standard deviations, as
@@ -229,6 +237,19 @@ int sortParticles(const void *a, const void *b)
     else if (ia->w < ib->w)
         return -1;
 
+
+    return 0;
+}
+
+int sortParticlesByW(const void *a, const void *b)
+{
+    const Particle *ia = (const Particle *)a;
+    const Particle *ib = (const Particle *)b;
+
+    if (ia->w > ib->w)
+        return 1;
+    else if (ia->w < ib->w)
+        return -1;
 
     return 0;
 }
@@ -438,17 +459,25 @@ void Algorithms::locationBelief(Particle &particle)
             }
         }
 
-        printf("(%d: %.2lf,%.2lf) against (%d: %.2lf,%.2lf)  DIST: %.2lf/%.2lf\n",
+        cout << "CHOOSEN:\n";
+        printParticle(*currentParticle);
+        cout << "BEST:\n";
+        printParticle(particles[no]);
+
+        cout << "DISTANCES ARE: " << distanceBetweenPoints(currentParticle->position, particle.position)
+                << " / " << minDist << endl;
+
+        /*printf("(%d: %.2lf,%.2lf) against (%d: %.2lf,%.2lf)  DIST: %.2lf/%.2lf\n",
                 currentParticle->id, currentParticle->position.x, currentParticle->position.y,
                 no, particles[no].position.x, particles[no].position.y,
                 distanceBetweenPoints(currentParticle->position, particle.position), minDist);
-        printf("PROBS: %lf against %lf\n", particles[NO_PARTICLES-1].wC, particles[no].wC);
+        printf("PROBS: %lf against %lf\n", particles[NO_PARTICLES-1].wC, particles[no].wC);*/
 
-        isToPrint = true;
+        /*isToPrint = true;
         cout << "LET'S SEE...\n" << calculateParticleProbability(currentParticle)
                 << "\n\nand " << calculateParticleProbability(&particles[no]) << endl;
 
-        isToPrint = false;
+        isToPrint = false;*/
     }
 
     //printParticles();
@@ -458,15 +487,19 @@ void Algorithms::locationBelief(Particle &particle)
 void Algorithms::printParticles()
 {
     for (int i = 0; i < NO_PARTICLES; i++)
-    {
-        cout << "-------------------------------------------\n";
-        cout << "PARTICLE NO: " << particles[i].id << endl;
-        cout << "X: " << particles[i].position.x << " Y: " << particles[i].position.y
-                << " ANGLE: " << particles[i].angle << endl;
-        cout << "PROBS: " << particles[i].w << "/" << particles[i].wC << endl;
-        cout << "OFFSET: " << particles[i].offset << "D: " << particles[i].d << endl;
-        cout << "-------------------------------------------\n";
-    }
+        printParticle(particles[i]);
 
     getchar();
+}
+
+void Algorithms::printParticle(Particle &particle)
+{
+            cout << "-------------------------------------------\n";
+        cout << "PARTICLE NO: " << particle.id << endl;
+        cout << "X: " << particle.position.x << " Y: " << particle.position.y
+                << " ANGLE: " << particle.angle << endl;
+        cout << "PROBS: " << particle.w << "/" << particle.wC << endl;
+        cout << "OFFSET: " << particle.offset << "D: " << particle.d << endl;
+        cout << "EDGE NO: " << particle.edge->id << endl;
+        cout << "-------------------------------------------\n";
 }

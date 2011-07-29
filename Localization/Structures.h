@@ -46,6 +46,8 @@ typedef struct
 {
 	double width, length;
         Vertix *begin, *end;
+
+        int id;
 }Edge;
 
 typedef struct

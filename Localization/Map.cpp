@@ -26,6 +26,10 @@ Map::Map(int nV, int nAP, int w, int h)
     cout << "LEARNING PHASE INITIATED..." << endl;
     learningPhase();
     cout << "LEARNING PHASE CONCLUDED!" << endl;
+
+    //DEBUG:
+    for (int i = 0; i < NO_EDGES; i++)
+        edges[i].id = i;
 }
 
 /* GETTERS & SETTERS */
